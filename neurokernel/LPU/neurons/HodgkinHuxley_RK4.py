@@ -10,32 +10,6 @@ from pycuda.compiler import SourceModule
 import os.path
 import neurokernel.LPU.neurons as neurons
 
-<<<<<<< HEAD
-=======
-
-class HodgkinHuxley_RK4(BaseNeuron):
-    '''
-    LVS Hodgkin-Huxley neural model
-    Runge-Kutta 4th order multivariable integration scheme
-
-    ###init values###
-    Quantities
-        initV:  membrane potential voltage
-        initn
-        initm
-        inith
-
-    Constants:
-        C_m:    membrane capacitance per unit area
-        V_Na:   sodium ion channel potential
-        V_K:    potassium ion channel potential
-        V_l:    leak channel potential
-        g_Na:   electrical conductance of voltage-gated sodium ion channel
-        g_K:    electrical conductance of voltage-gated potassium ion channel
-        g_l:    electrical conductance of leak channel
-    '''
-    def __init__(self, n_dict, V, dt, debug=False):
->>>>>>> HH ready for testing, fixed timescale error for Morris-Lecar
 
 class HodgkinHuxley_RK4(BaseNeuron):
     '''
