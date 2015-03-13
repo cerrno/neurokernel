@@ -43,19 +43,20 @@ V.add_plot({'type': 'waveform', 'ids': {0:[1]}},
 V._update_interval = 50
 
 #rows and colums to plot in terms of size
-V.rows = 5
-V.cols = 1
+V.rows = 4
+V.cols = 1 
 
 #self explantory
 V.fontsize = 10
-V.out_filename = 'simple_output.avi'
-V.codec = 'libtheora'
+#V.out_filename = 'simple_output.avi'
+#V.codec = 'libtheora'
 
 #time step
 V.dt = 0.0001
 
 #?
 V.xlim = [0, 1.0]
+V.ylim = [-70.0, -50.0]
 
 #figure size
 V.figsize = (6, 4)
