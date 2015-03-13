@@ -11,7 +11,6 @@ import h5py
 
 #sets up neurons/networks
 G = nx.DiGraph()
-<<<<<<< HEAD
 
 #sets up node connections in graph
 G.add_nodes_from([0,1])
@@ -20,10 +19,6 @@ G.add_nodes_from([0,3])
 
 
 #The default leaky that leads to all of the others
-=======
-G.add_nodes_from([0,1])
-    
->>>>>>> Initial commit of work on Morris-Lecar RK4 and HH implementation
 G.node[0] = {
         'model' : 'LeakyIAF',
         'name' : 'neuron_0', 
@@ -38,18 +33,15 @@ G.node[0] = {
         'C':0.0669810502993
         }
 
-<<<<<<< HEAD
 #MorrisLecar updated
-=======
->>>>>>> Initial commit of work on Morris-Lecar RK4 and HH implementation
 G.node[1] = {
         'model' : 'MorrisLecar_RK4',
+        #'model' : 'MorrisLecar', 
         'name' : 'neuron_1', 
         'extern': False, 
         'public': True, 
         'spiking': False, 
         'selector':'/a[1]', 
-<<<<<<< HEAD
         'V1': -1.2,
         'V2': 18.0,
         'V3': 2.0,
@@ -109,33 +101,12 @@ G.node[3] = {
         'g_Na': 120,
         'g_K': 36,
         'g_l': 0.3
-=======
-        'V1': 0.03,
-        'V2': -0.015,
-        'V3': -0,
-        'V4': 0.03,
-        'V_l': -50, 
-        'V_ca': 0, 
-        'V_k': -70, 
-        'G_l': 3, 
-        'G_ca': 0, 
-        'G_k': 8,
-        'phi': 0.025, 
-        'offset': 0,
-        'initV': -0.05214,
-        'initn': 0.03
-        #V_1, V_2, V_3, V_4, V_l = -50, V_ca = 0, V_k = -70, G_l = 3, G_ca = 0, G_k = 8, Tphi 
->>>>>>> Initial commit of work on Morris-Lecar RK4 and HH implementation
-        }
+       }
 
 G.add_edge(0, 1, type='directed', attr_dict={
     'model': 'AlphaSynapse', 
     'name': 'synapse_0_1', 
-<<<<<<< HEAD
     'class': 0,
-=======
-    'class': 1,
->>>>>>> Initial commit of work on Morris-Lecar RK4 and HH implementation
     'ar': 1.1*1e2,
     'ad': 1.9*1e3,
     'reverse': 65*1e-3,
@@ -143,7 +114,6 @@ G.add_edge(0, 1, type='directed', attr_dict={
     'conductance': True
     })
 
-<<<<<<< HEAD
 G.add_edge(0, 2, type='directed', attr_dict={
     'model': 'AlphaSynapse', 
     'name': 'synapse_0_2', 
@@ -167,8 +137,6 @@ G.add_edge(0, 2, type='directed', attr_dict={
 #    'conductance': True
 #    })
 
-=======
->>>>>>> Initial commit of work on Morris-Lecar RK4 and HH implementation
 nx.write_gexf(G, 'simple_lpu.gexf.gz')
 
 

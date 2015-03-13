@@ -34,6 +34,10 @@ print s_dict
 lpu = LPU(dt, n_dict, s_dict, input_file='./data/simple_input.h5', output_file = 'simple_output.h5', port_ctrl=port_ctrl, port_data=port_data, device = 0, id='simple', debug = False)
 >>>>>>> Initial commit of work on Morris-Lecar RK4 and HH implementation
 
+print n_dict
+print
+print s_dict
+
 man = Manager(port_data, port_ctrl)
 
 man.add_brok()
