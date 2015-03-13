@@ -16,3 +16,5 @@
 neurokernel.egg-info
 neurokernel/neurokernel.log
 !neurokernel/examples/retina_lamina/image1.mat
+
+.idea/
