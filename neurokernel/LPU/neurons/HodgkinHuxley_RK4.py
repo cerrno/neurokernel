@@ -35,7 +35,6 @@ class HodgkinHuxley_RK4(BaseNeuron):
         g_l:    electrical conductance of leak channel
     '''
     def __init__(self, n_dict, V, dt, debug=False, LPU_id=None):
-
         self.num_neurons = len(n_dict['id'])
         self.dt = np.double(dt)
         self.debug = debug
@@ -45,9 +44,9 @@ class HodgkinHuxley_RK4(BaseNeuron):
         self.V = V
 
         self.n = garray.to_gpu(np.asarray(n_dict['initn'], dtype=np.float64))
+
         self.m = garray.to_gpu(np.asarray(n_dict['initm'], dtype=np.float64))
         self.h = garray.to_gpu(np.asarray(n_dict['inith'], dtype=np.float64))
-
         self.C_m = garray.to_gpu(np.asarray(n_dict['C_m'], dtype=np.float64))
         self.V_Na = garray.to_gpu(np.asarray(n_dict['V_Na'], dtype=np.float64))
         self.V_K = garray.to_gpu(np.asarray(n_dict['V_K'], dtype=np.float64))

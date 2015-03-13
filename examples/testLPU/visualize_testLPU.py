@@ -39,9 +39,6 @@ V.add_plot({'type': 'waveform', 'ids': {0:[1]}},
 V.add_plot({'type': 'waveform', 'ids': {0:[2]}},
             'Simple LPU (Graded Potential)', 'Output')
 
-
-
-
 #vars for plots
 
 #how often it updates

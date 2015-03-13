@@ -33,9 +33,7 @@ class MorrisLecar_RK4(BaseNeuron):
         self.G_ca = garray.to_gpu(np.asarray(n_dict['G_ca'], dtype = np.float64))
         self.G_k = garray.to_gpu(np.asarray(n_dict['G_k'], dtype = np.float64))
         self.Tphi = garray.to_gpu(np.asarray(n_dict['phi'], dtype=np.float64))
-        self.offset = garray.to_gpu(np.asarray(n_dict['offset'],
-                                           dtype=np.float64))
-
+        self.offset = garray.to_gpu(np.asarray(n_dict['offset'], dtype=np.float64))
         cuda.memcpy_htod(int(self.V), np.asarray(n_dict['initV'],
                      dtype=np.double))
         self.update = self.get_rk4_kernel()
@@ -72,5 +70,5 @@ class MorrisLecar_RK4(BaseNeuron):
                       np.intp, np.intp, np.intp, np.intp,
                       np.intp, np.intp, np.intp, np.intp, np.intp,
                       np.intp, np.intp, np.intp])
-
+        
         return func
