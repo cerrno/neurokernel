@@ -102,23 +102,23 @@ class MorrisLecar_RK4(BaseNeuron):
                                 g_Ca[cart_id], g_K[cart_id], offset[cart_id]);
             k1_n = dt * compute_n(V, n, V_3[cart_id],
                                 V_4[cart_id], Tphi[cart_id]);
-            k2_V = dt * compute_V(V + 0.5*k1_V, n, I,
+            k2_V = dt * compute_V(V + 0.5*k1_V, n + 0.5*k1_n, I,
                                 V_1[cart_id], V_2[cart_id], V_L[cart_id],
                                 V_Ca[cart_id], V_K[cart_id], g_L[cart_id],
                                 g_Ca[cart_id], g_K[cart_id], offset[cart_id]);
-            k2_n = dt * compute_n(V + 0.5*k1_n, n, V_3[cart_id],
+            k2_n = dt * compute_n(V + 0.5*k1_V, n + 0.5*k1_n, V_3[cart_id],
                                 V_4[cart_id], Tphi[cart_id]);
-            k3_V = dt * compute_V(V + 0.5*k2_V, n, I,
+            k3_V = dt * compute_V(V + 0.5*k2_V, n + 0.5*k2_n, I,
                                 V_1[cart_id], V_2[cart_id], V_L[cart_id],
                                 V_Ca[cart_id], V_K[cart_id], g_L[cart_id],
                                 g_Ca[cart_id], g_K[cart_id], offset[cart_id]);
-            k3_n = dt * compute_n(V + 0.5*k2_n, n, V_3[cart_id],
+            k3_n = dt * compute_n(V + 0.5*k2_n, n + 0.5*k2_n, V_3[cart_id],
                                 V_4[cart_id], Tphi[cart_id]);
-            k4_V = dt * compute_V(V + k3_V, n, I,
+            k4_V = dt * compute_V(V + k3_V, n + k3_n, I,
                                 V_1[cart_id], V_2[cart_id], V_L[cart_id],
                                 V_Ca[cart_id], V_K[cart_id], g_L[cart_id],
                                 g_Ca[cart_id], g_K[cart_id], offset[cart_id]);
-            k4_n = dt * compute_n(V + k3_n, n, V_3[cart_id],
+            k4_n = dt * compute_n(V + k3_V, n + k3_n, V_3[cart_id],
                                 V_4[cart_id], Tphi[cart_id]);
             V += (k1_V + 2*(k2_V + k3_V) + k4_V)/6.0;
             n += (k1_n + 2*(k2_n + k3_n) + k4_n)/6.0;
