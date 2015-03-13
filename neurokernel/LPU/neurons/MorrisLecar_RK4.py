@@ -95,7 +95,7 @@ class MorrisLecar_RK4(BaseNeuron):
             %(type)s k1_V, k1_n, k2_V, k2_n, k3_V, k3_n, k4_V, k4_n;
 
             // LVS RK4
-            // LVS TODO: YOU DID MULTIDIMENSIONAL WRONG, DUMMY!
+            // TODO: look into storing dereferenced array values
             k1_V = dt * compute_V(V, n, I,
                                 V_1[cart_id], V_2[cart_id], V_L[cart_id],
                                 V_Ca[cart_id], V_K[cart_id], g_L[cart_id],
@@ -112,7 +112,7 @@ class MorrisLecar_RK4(BaseNeuron):
                                 V_1[cart_id], V_2[cart_id], V_L[cart_id],
                                 V_Ca[cart_id], V_K[cart_id], g_L[cart_id],
                                 g_Ca[cart_id], g_K[cart_id], offset[cart_id]);
-            k3_n = dt * compute_n(V + 0.5*k2_n, n + 0.5*k2_n, V_3[cart_id],
+            k3_n = dt * compute_n(V + 0.5*k2_V, n + 0.5*k2_n, V_3[cart_id],
                                 V_4[cart_id], Tphi[cart_id]);
             k4_V = dt * compute_V(V + k3_V, n + k3_n, I,
                                 V_1[cart_id], V_2[cart_id], V_L[cart_id],

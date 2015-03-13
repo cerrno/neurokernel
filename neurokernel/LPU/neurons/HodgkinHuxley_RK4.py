@@ -175,6 +175,11 @@ class HodgkinHuxley_RK4(BaseNeuron):
             n += (k1_n + 2*(k2_n + k3_n) + k4_n)/6.0;
             m += (k1_m + 2*(k2_m + k3_m) + k4_m)/6.0;
             h += (k1_h + 2*(k2_h + k3_h) + k4_h)/6.0;
+
+            g_V[cart_id] = V;
+            g_n[cart_id] = n;
+            g_m[cart_id] = m;
+            g_h[cart_id] = h;
         }
     }
     """
