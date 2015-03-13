@@ -21,6 +21,7 @@ V.add_plot({'type': 'waveform', 'ids': [[0]]}, 'input_Input')
 #takes in the spike data/potential from the neuron output and plots it
 V.add_LPU('simple_output_spike.h5',
           './data/simple_lpu.gexf.gz', 'Simple LPU (Spikes)')
+<<<<<<< HEAD
 
 #the [0,1] under ids should print both hh and leaky
 V.add_plot({'type':'raster', 'ids': {0: [0]},
@@ -42,11 +43,22 @@ V.add_plot({'type': 'waveform', 'ids': {0:[2]}},
 
 
 
+=======
+V.add_plot({'type':'raster', 'ids': {0: [0]},
+            'yticks': [0], 'yticklabels': [0]},
+            'Simple LPU (Spikes)','Output')
+V.add_LPU('simple_output_gpot.h5',
+          './data/simple_lpu.gexf.gz', 'Simple LPU (Graded Potential)')
+V.add_plot({'type': 'waveform', 'ids': {0:[0]}},
+            'Simple LPU (Graded Potential)', 'Output')
+
+>>>>>>> Initial commit of work on Morris-Lecar RK4 and HH implementation
 #vars for plots
 
 #how often it updates
 V._update_interval = 50
 
+<<<<<<< HEAD
 #rows and colums to plot in terms of size
 V.rows = 5
 V.cols = 1 
@@ -55,10 +67,21 @@ V.cols = 1
 V.fontsize = 10
 #V.out_filename = 'simple_output.avi'
 #V.codec = 'libtheora'
+=======
+#rows and colums to plot
+V.rows = 3
+V.cols = 1
+
+#self explantory
+V.fontsize = 10
+V.out_filename = 'simple_output.avi'
+V.codec = 'libtheora'
+>>>>>>> Initial commit of work on Morris-Lecar RK4 and HH implementation
 
 #time step
 V.dt = 0.0001
 
+<<<<<<< HEAD
 #Changes the sizes on the axis
 V.xlim = [0, 1.0]
 V.ylim = [-70.0, 10.0]
@@ -67,6 +90,13 @@ V.ylim = [-70.0, 10.0]
 V.figsize = (16, 9)
 
 V.title = "Simple LPU Testing RK4 Models"
+=======
+#?
+V.xlim = [0, 1.0]
+
+#figure size
+V.figsize = (6, 4)
+>>>>>>> Initial commit of work on Morris-Lecar RK4 and HH implementation
 
 #runs the visualizer
 V.run('simple_output.png', 120)
