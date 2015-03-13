@@ -46,7 +46,7 @@ V._update_interval = 50
 
 #rows and colums to plot in terms of size
 V.rows = 5
-V.cols = 1 
+V.cols = 1
 
 #self explantory
 V.fontsize = 10
