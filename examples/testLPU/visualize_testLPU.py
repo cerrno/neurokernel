@@ -38,7 +38,6 @@ V.add_plot({'type': 'waveform', 'ids': {0:[1]}},
 
 V.add_plot({'type': 'waveform', 'ids': {0:[2]}},
             'Simple LPU (Graded Potential)', 'Output')
-
 #vars for plots
 
 #how often it updates
@@ -52,9 +51,6 @@ V.cols = 1
 V.fontsize = 10
 #V.out_filename = 'simple_output.avi'
 #V.codec = 'libtheora'
-#rows and colums to plot in terms of size
-V.rows = 3
-V.cols = 1
 
 #self explantory
 V.fontsize = 10

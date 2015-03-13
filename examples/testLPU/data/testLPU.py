@@ -19,6 +19,7 @@ G.add_nodes_from([0,3])
 
 
 #The default leaky that leads to all of the others
+
 G.node[0] = {
         'model' : 'LeakyIAF',
         'name' : 'neuron_0', 
