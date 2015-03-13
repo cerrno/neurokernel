@@ -36,6 +36,7 @@ G.node[0] = {
 #MorrisLecar updated
 G.node[1] = {
         'model' : 'MorrisLecar_RK4',
+        #'model' : 'MorrisLecar', 
         'name' : 'neuron_1', 
         'extern': False, 
         'public': True, 

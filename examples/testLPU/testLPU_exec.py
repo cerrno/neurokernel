@@ -17,6 +17,10 @@ port_ctrl = get_random_port()
 
 lpu = LPU(dt, n_dict, s_dict, input_file='./data/simple_input.h5', output_file = 'simple_output.h5', port_ctrl=port_ctrl, port_data=port_data, device = 0, id='simple', debug = False)
 
+print n_dict
+print
+print s_dict
+
 man = Manager(port_data, port_ctrl)
 
 man.add_brok()
