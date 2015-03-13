@@ -29,32 +29,33 @@ G.node[0] = {
 
 G.node[1] = {
         'model' : 'MorrisLecar_RK4',
+        #'model' : 'MorrisLecar', 
         'name' : 'neuron_1', 
         'extern': False, 
         'public': True, 
         'spiking': False, 
         'selector':'/a[1]', 
         'V1': 0.03,
-        'V2': -0.015,
-        'V3': -0,
+        'V2': 0.015,
+        'V3': 0.001,
         'V4': 0.03,
-        'V_l': -50, 
-        'V_ca': 0, 
-        'V_k': -70, 
-        'G_l': 3, 
-        'G_ca': 0, 
-        'G_k': 8,
-        'phi': 0.025, 
+        'V_l': -0.050, 
+        'V_ca': 0.001, 
+        'V_k': -0.070, 
+        'G_l': 0.003, 
+        'G_ca': 0.001, 
+        'G_k': 0.008,
+        'phi': 0.067, 
         'offset': 0,
         'initV': -0.05214,
         'initn': 0.03
-        #V_1, V_2, V_3, V_4, V_l = -50, V_ca = 0, V_k = -70, G_l = 3, G_ca = 0, G_k = 8, Tphi 
+        #V_1 = 10, V_2 15, V_3 = -1, V_4 14.5, V_l = -50, V_ca = 0, V_k = -70, G_l = 3, G_ca = 0, G_k = 8, Tphi 
         }
 
 G.add_edge(0, 1, type='directed', attr_dict={
     'model': 'AlphaSynapse', 
     'name': 'synapse_0_1', 
-    'class': 1,
+    'class': 0,
     'ar': 1.1*1e2,
     'ad': 1.9*1e3,
     'reverse': 65*1e-3,
