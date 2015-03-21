@@ -27,8 +27,14 @@ V.add_plot({'type':'raster', 'ids': {0: [0]},
             'yticks': [0], 'yticklabels': [0]},
             'Simple LPU (Spikes)','Output')
 
+V.add_plot({'type':'raster', 'ids': {0: [1]},
+            'yticks': [0], 'yticklabels': [0]},
+            'Simple LPU (Spikes)','Output')
+
+
 V.add_LPU('simple_output_gpot.h5',
           './data/simple_lpu.gexf.gz', 'Simple LPU (Graded Potential)')
+
 V.add_plot({'type': 'waveform', 'ids': {0:[0]}},
             'Simple LPU (Graded Potential)', 'Output')
 
@@ -54,7 +60,7 @@ V.fontsize = 10
 #time step
 V.dt = 0.0001
 
-#?
+#Changes the sizes on the axis
 V.xlim = [0, 1.0]
 V.ylim = [-70.0, -50.0]
 

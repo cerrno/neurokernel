@@ -12,10 +12,13 @@ import h5py
 #sets up neurons/networks
 G = nx.DiGraph()
 
-#FIGURE OUT HOW TO SET UP SECOND NODE HERE
+#sets up node connections in graph
 G.add_nodes_from([0,1])
 G.add_nodes_from([0,2])
+G.add_nodes_from([0,3])
 
+
+#The default leaky that leads to all of the others
 G.node[0] = {
         'model' : 'LeakyIAF',
         'name' : 'neuron_0', 
@@ -30,6 +33,7 @@ G.node[0] = {
         'C':0.0669810502993
         }
 
+#MorrisLecar updated
 G.node[1] = {
         'model' : 'MorrisLecar_RK4',
         #'model' : 'MorrisLecar', 
@@ -54,7 +58,7 @@ G.node[1] = {
         'initn': 0.03
         }
 
-#NOT GENERATING THIS NODE, FIGURE OUT WHY
+#MorrisLecar original
 G.node[2] = {
         'model': 'MorrisLecar_a',
         'extern': False, 
@@ -77,6 +81,27 @@ G.node[2] = {
         'initn': 0.03       
         }
 
+#HH Neuron Setup; LUCAS YOULL WANT TO LOOK AT THIS PART TO SET UP THE CONSTANTS
+#I used the constants from matlab in neuroscience from my previous exercises
+G.node[3] = {
+        'model': 'HodgkinHuxley_RK4',
+        'extern': False,
+        'public': True,
+        'spiking': True,
+        'selector':'/a[3]',
+        'initV': -50.0,
+        'initn': 0.0003,
+        'initm': .0011,
+        'inith': .9998,
+        'C_m': 1.0,
+        'V_Na': 115.0,
+        'V_K': -12.0,
+        'V_l': -10.613,
+        'g_Na': 120.0,
+        'g_K': 36.0,
+        'g_l': 0.3
+        }
+
 G.add_edge(0, 1, type='directed', attr_dict={
     'model': 'AlphaSynapse', 
     'name': 'synapse_0_1', 
@@ -89,6 +114,17 @@ G.add_edge(0, 1, type='directed', attr_dict={
     })
 
 G.add_edge(0, 2, type='directed', attr_dict={
+    'model': 'AlphaSynapse', 
+    'name': 'synapse_0_2', 
+    'class': 0,
+    'ar': 1.1*1e2,
+    'ad': 1.9*1e3,
+    'reverse': 65*1e-3,
+    'gmax': 2*1e-3,
+    'conductance': True
+    })
+
+G.add_edge(0, 3, type='directed', attr_dict={
     'model': 'AlphaSynapse', 
     'name': 'synapse_0_2', 
     'class': 0,
