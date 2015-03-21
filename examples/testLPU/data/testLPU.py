@@ -36,7 +36,6 @@ G.node[0] = {
 #MorrisLecar updated
 G.node[1] = {
         'model' : 'MorrisLecar_RK4',
-        #'model' : 'MorrisLecar', 
         'name' : 'neuron_1', 
         'extern': False, 
         'public': True, 
@@ -61,6 +60,7 @@ G.node[1] = {
 #MorrisLecar original
 G.node[2] = {
         'model': 'MorrisLecar_a',
+        'name': 'neuron_2',
         'extern': False, 
         'public': True, 
         'spiking': False, 
@@ -85,14 +85,15 @@ G.node[2] = {
 #I used the constants from matlab in neuroscience from my previous exercises
 G.node[3] = {
         'model': 'HodgkinHuxley_RK4',
+        'name': 'neuron_3',
         'extern': False,
         'public': True,
         'spiking': True,
         'selector':'/a[3]',
         'initV': -50.0,
         'initn': 0.0003,
-        'initm': .0011,
-        'inith': .9998,
+        'initm': 0.0011,
+        'inith': 0.9998,
         'C_m': 1.0,
         'V_Na': 115.0,
         'V_K': -12.0,
@@ -126,7 +127,7 @@ G.add_edge(0, 2, type='directed', attr_dict={
 
 G.add_edge(0, 3, type='directed', attr_dict={
     'model': 'AlphaSynapse', 
-    'name': 'synapse_0_2', 
+    'name': 'synapse_0_3', 
     'class': 0,
     'ar': 1.1*1e2,
     'ad': 1.9*1e3,
