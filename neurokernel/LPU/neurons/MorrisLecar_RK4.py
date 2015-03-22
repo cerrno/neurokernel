@@ -9,11 +9,12 @@ import pycuda.driver as cuda
 from pycuda.compiler import SourceModule
 
 class MorrisLecar_RK4(BaseNeuron):
-    def __init__(self, n_dict, V, dt, debug=False):
+    def __init__(self, n_dict, V, dt, debug=False, LPU_id=None):
 
         self.num_neurons = len(n_dict['id'])
         self.dt = np.double(dt)
         self.debug = debug
+        self.LPU_id = LPU_id
 
         self.V = V
 
@@ -31,10 +32,10 @@ class MorrisLecar_RK4(BaseNeuron):
         self.G_k = garray.to_gpu(np.asarray(n_dict['G_k'], dtype = np.float64))
         self.Tphi = garray.to_gpu(np.asarray(n_dict['phi'], dtype=np.float64))
         self.offset = garray.to_gpu(np.asarray(n_dict['offset'],
-                                               dtype=np.float64))
+                                           dtype=np.float64))
 
         cuda.memcpy_htod(int(self.V), np.asarray(n_dict['initV'],
-                         dtype=np.double))
+                     dtype=np.double))
         self.update = self.get_rk4_kernel()
 
 
@@ -44,7 +45,7 @@ class MorrisLecar_RK4(BaseNeuron):
     def eval(self, st=None):
         self.update.prepared_async_call(
             self.update_grid, self.update_block, st, self.V, self.n.gpudata,
-            self.num_neurons, self.I.gpudata, self.dt*1000,
+            self.num_neurons, self.I.gpudata, self.ddt*1000,
             self.V_1.gpudata, self.V_2.gpudata, self.V_3.gpudata,
             self.V_4.gpudata, self.V_l.gpudata, self.V_ca.gpudata,
             self.V_k.gpudata, self.G_l.gpudata, self.G_ca.gpudata,
@@ -94,8 +95,7 @@ class MorrisLecar_RK4(BaseNeuron):
 
             %(type)s k1_V, k1_n, k2_V, k2_n, k3_V, k3_n, k4_V, k4_n;
 
-            // LVS RK4
-            // TODO: look into storing dereferenced array values
+            // LVS TODO: look into storing dereferenced array values
             k1_V = dt * compute_V(V, n, I,
                                 V_1[cart_id], V_2[cart_id], V_L[cart_id],
                                 V_Ca[cart_id], V_K[cart_id], g_L[cart_id],
