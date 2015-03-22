@@ -30,11 +30,12 @@ class HodgkinHuxley_RK4(BaseNeuron):
         g_K:    electrical conductance of voltage-gated potassium ion channel
         g_l:    electrical conductance of leak channel
     '''
-    def __init__(self, n_dict, V, dt, debug=False):
+    def __init__(self, n_dict, V, dt, debug=False, LPU_id=None):
 
         self.num_neurons = len(n_dict['id'])
         self.dt = np.double(dt)
         self.debug = debug
+        self.LPU_id = LPU_id
 
         self.V = V
 
@@ -61,7 +62,7 @@ class HodgkinHuxley_RK4(BaseNeuron):
         self.update.prepared_async_call(
             self.update_grid, self.update_block, st,
             self.V, self.n.gpudata, self.m.gpudata, self.h.gpudata,
-            self.num_neurons, self.I.gpudata, self.dt,
+            self.num_neurons, self.I.gpudata, self.dt*1000,
             self.C_m.gpudata, self.V_Na.gpudata, self.V_K.gpudata,
             self.V_l.gpudata, self.g_Na.gpudata, self.g_K.gpudata,
             self.g_l.gpudata)
@@ -73,39 +74,34 @@ class HodgkinHuxley_RK4(BaseNeuron):
     #define NVAR 2
     #define NNEU %(nneu)d //NROW * NCOL
 
-
-    // constant defines
-    #define CONST 0
-
     // device compute submethods
     __device__ %(type)s compute_dV(%(type)s V, %(type)s n, %(type)s m, %(type)s h,
-                                    %(type) I, %(type)s C_m, %(type)s V_Na,
+                                    %(type)s I, %(type)s C_m, %(type)s V_Na,
                                     %(type)s V_K,  %(type)s V_l,  %(type)s g_Na,
                                     %(type)s g_K,  %(type)s g_l)
     {
-        return (-1/C_m) * (g_K*n*n*n*n(V-V_K) + g_Na*m*m*m*h*(V-V_Na)
-                + g_l*(V-V_l)-I);
+        return (-1/C_m) * (g_K*n*n*n*n(V-V_K) + g_Na*m*m*m*h*(V-V_Na) + g_l*(V-V_l)-I);
     }
 
     __device__ %(type)s compute_dn(%(type)s V, %(type)s n)
     {
         %(type)s alpha_n = (0.01*(V+10.0)) / (exp((V+10.0)/10.0) - 1);
         %(type)s beta_n = 0.125 * exp(V/80.0);
-        return alpha_n * (1-n) - beta_n * n;
+        return (alpha_n * (1-n) - beta_n * n);
     }
 
     __device__ %(type)s compute_dm(%(type)s V, %(type)s m)
     {
         %(type)s alpha_m = (0.1*(V+25.0)) / (exp(V+25.0)/10.0) -1);
         %(type)s beta_m = 4 * exp(V/18.0);
-        return alpha_m * (1-m) - beta_m * m;
+        return (alpha_m * (1-m) - beta_m * m);
     }
 
     __device__ %(type)s compute_dh(%(type)s V, %(type)s h)
     {
         %(type)s alpha_h = 0.07 * exp(V/20.0);
         %(type)s beta_h = 1 / (exp((V+30.0)/10.0) + 1);
-        return alpha_h * (1-h) - beta_h * h;
+        return (alpha_h * (1-h) - beta_h * h);
     }
 
     // main kernel

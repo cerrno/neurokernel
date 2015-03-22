@@ -19,3 +19,5 @@ neurokernel/neurokernel.log
 
 .idea/
 *.swp
+build/
+dist/
