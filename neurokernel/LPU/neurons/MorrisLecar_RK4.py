@@ -11,7 +11,7 @@ import os.path
 import neurokernel.LPU.neurons as neurons
 
 class MorrisLecar_RK4(BaseNeuron):
-    def __init__(self, n_dict, V, dt, debug=False):
+    def __init__(self, n_dict, V, dt, debug=False, LPU_id=None):
 
         self.num_neurons = len(n_dict['id'])
         self.dt = np.double(dt)
@@ -45,7 +45,7 @@ class MorrisLecar_RK4(BaseNeuron):
     def eval(self, st=None):
         self.update.prepared_async_call(
             self.update_grid, self.update_block, st, self.V, self.n.gpudata,
-            self.num_neurons, self.I.gpudata, self.dt*1000,
+            self.num_neurons, self.I.gpudata, self.ddt*1000,
             self.V_1.gpudata, self.V_2.gpudata, self.V_3.gpudata,
             self.V_4.gpudata, self.V_l.gpudata, self.V_ca.gpudata,
             self.V_k.gpudata, self.G_l.gpudata, self.G_ca.gpudata,
