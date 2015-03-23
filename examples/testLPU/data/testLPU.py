@@ -88,24 +88,24 @@ G.node[2] = {
 # it again using the constants
 
 G.node[3] = {
-         'model': 'HodgkinHuxley_RK4',
-         'name': 'neuron_3',
-         'extern': False,
-         'public': True,
-         'spiking': True,
-         'selector':'/a[3]',
-         'initV': -50.0,
-         'initn': 0.0003,
-         'initm': 0.0011,
-         'inith': 0.9998,
-         'C_m': 0.01,
-         'V_Na': 55.17,
-         'V_K': -72.14,
-         'V_l': -49.42,
-         'g_Na': 1.0,
-         'g_K': 0.36,
-         'g_l': 0.003
-         }
+        'model': 'HodgkinHuxley_RK4',
+        'name': 'neuron_3',
+        'extern': False,
+        'public': True,
+        'spiking': True,
+        'selector':'/a[3]',
+        'initV': -50.0,
+        'initn': 0.0003,
+        'initm': 0.0011,
+        'inith': 0.9998,
+        'C_m': 0.01,
+        'V_Na': 55.17,
+        'V_K': -72.14,
+        'V_l': -49.42,
+        'g_Na': 1.0,
+        'g_K': 0.36,
+        'g_l': 0.003
+        }
 
 G.add_edge(0, 1, type='directed', attr_dict={
     'model': 'AlphaSynapse', 
@@ -130,15 +130,15 @@ G.add_edge(0, 2, type='directed', attr_dict={
     })
 
 G.add_edge(0, 3, type='directed', attr_dict={
-     'model': 'AlphaSynapse',
-     'name': 'synapse_0_3',
-     'class': 0,
-     'ar': 1.1*1e2,
-     'ad': 1.9*1e3,
-     'reverse': 65*1e-3,
-     'gmax': 2*1e-3,
-     'conductance': True
-     })
+    'model': 'AlphaSynapse',
+    'name': 'synapse_0_3',
+    'class': 0,
+    'ar': 1.1*1e2,
+    'ad': 1.9*1e3,
+    'reverse': 65*1e-3,
+    'gmax': 2*1e-3,
+    'conductance': True
+    })
 
 nx.write_gexf(G, 'simple_lpu.gexf.gz')
 

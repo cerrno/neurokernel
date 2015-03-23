@@ -86,14 +86,14 @@ class HodgkinHuxley_RK4(BaseNeuron):
 
     __device__ %(type)s compute_dn(%(type)s V, %(type)s n)
     {
-        %(type)s alpha_n = (0.01*(V+10.0)) / ((exp((V+10.0)/10.0)) - 1);
+       %(type)s alpha_n = (0.01*(V+10.0)) / (exp((V+10.0)/10.0)-1);
         %(type)s beta_n = 0.125 * exp(V/80.0);
         return (alpha_n * (1-n) - beta_n * n);
     }
 
     __device__ %(type)s compute_dm(%(type)s V, %(type)s m)
     {
-        %(type)s alpha_m = (0.1*(V+25.0)) / ((exp(V+25.0)/10.0) -1);
+       %(type)s alpha_m = (0.1*(V+25.0)) / (exp((V+25.0)/10.0) - 1);
         %(type)s beta_m = 4 * exp(V/18.0);
         return (alpha_m * (1-m) - beta_m * m);
     }
