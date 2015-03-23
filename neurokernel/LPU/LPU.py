@@ -803,6 +803,7 @@ class LPU(Module):
                 self.log_info("Error instantiating neurons of model '%s'" % t)
                 return None
 
+        # LVS TODO: possibly fix inconsistent passing of LPU_id
         if n['spiking'][0]:
             neuron = self._neuron_classes[ind](
                 n, int(int(self.spike_state.gpudata) + 
