@@ -28,11 +28,6 @@ man.add_brok()
 
 man.add_mod(lpu)
 
-<<<<<<< HEAD
-print "here"
-
 man.start(steps=Nt)
-
-print "here2"
 
 man.stop()
