@@ -15,7 +15,7 @@ G = nx.DiGraph()
 #sets up node connections in graph
 G.add_nodes_from([0,1])
 G.add_nodes_from([0,2])
-#G.add_nodes_from([0,3])
+G.add_nodes_from([0,3])
 
 
 #The default leaky that leads to all of the others

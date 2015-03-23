@@ -27,11 +27,6 @@ V.add_plot({'type':'raster', 'ids': {0: [0]},
             'yticks': [0], 'yticklabels': [0]},
             'Simple LPU (Spikes)','Output')
 
-#V.add_plot({'type':'raster', 'ids': {0: [1]},
-#            'yticks': [0], 'yticklabels': [0]},
-#            'Simple LPU (Spikes)','Output')
-
-
 V.add_LPU('simple_output_gpot.h5',
           './data/simple_lpu.gexf.gz', 'Simple LPU (Graded Potential)')
 
@@ -50,7 +45,7 @@ V.add_plot({'type': 'waveform', 'ids': {0:[2]}},
 V._update_interval = 50
 
 #rows and colums to plot in terms of size
-V.rows = 4
+V.rows = 3
 V.cols = 1 
 
 #self explantory
