@@ -28,6 +28,7 @@ man.add_brok()
 
 man.add_mod(lpu)
 
+<<<<<<< HEAD
 print
 print "hello"
 
@@ -36,4 +37,8 @@ man.start(steps=Nt)
 print
 print "goodbye"
 
+=======
+man.start(steps=Nt)
+
+>>>>>>> More error fixes
 man.stop()
