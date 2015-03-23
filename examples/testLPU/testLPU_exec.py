@@ -28,10 +28,12 @@ man.add_brok()
 
 man.add_mod(lpu)
 
-print "here"
+print
+print "hello"
 
 man.start(steps=Nt)
 
-print "here2"
+print
+print "goodbye"
 
 man.stop()

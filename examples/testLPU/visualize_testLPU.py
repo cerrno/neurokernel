@@ -27,9 +27,9 @@ V.add_plot({'type':'raster', 'ids': {0: [0]},
             'yticks': [0], 'yticklabels': [0]},
             'Simple LPU (Spikes)','Output')
 
-V.add_plot({'type':'raster', 'ids': {0: [1]},
-            'yticks': [0], 'yticklabels': [0]},
-            'Simple LPU (Spikes)','Output')
+#V.add_plot({'type':'raster', 'ids': {0: [1]},
+#            'yticks': [0], 'yticklabels': [0]},
+#            'Simple LPU (Spikes)','Output')
 
 
 V.add_LPU('simple_output_gpot.h5',

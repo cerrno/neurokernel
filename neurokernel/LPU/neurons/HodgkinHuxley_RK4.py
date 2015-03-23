@@ -36,6 +36,7 @@ class HodgkinHuxley_RK4(BaseNeuron):
     '''
     def __init__(self, n_dict, V, dt, debug=False, LPU_id=None):
         self.num_neurons = len(n_dict['id'])
+        print self.num_neurons
         self.dt = np.double(dt)
         self.debug = debug
         self.LPU_id = LPU_id
