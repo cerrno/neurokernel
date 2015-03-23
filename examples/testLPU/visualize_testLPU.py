@@ -27,9 +27,9 @@ V.add_plot({'type':'raster', 'ids': {0: [0]},
             'yticks': [0], 'yticklabels': [0]},
             'Simple LPU (Spikes)','Output')
 
-V.add_plot({'type':'raster', 'ids': {0: [1]},
-            'yticks': [0], 'yticklabels': [0]},
-            'Simple LPU (Spikes)','Output')
+#V.add_plot({'type':'raster', 'ids': {0: [1]},
+#            'yticks': [0], 'yticklabels': [0]},
+#            'Simple LPU (Spikes)','Output')
 
 
 V.add_LPU('simple_output_gpot.h5',
@@ -62,10 +62,10 @@ V.dt = 0.0001
 
 #Changes the sizes on the axis
 V.xlim = [0, 1.0]
-V.ylim = [-70.0, -50.0]
+V.ylim = [-70.0, -40.0]
 
 #figure size
-V.figsize = (6, 4)
+V.figsize = (8, 6)
 
 #runs the visualizer
 V.run('simple_output.png', 120)
