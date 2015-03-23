@@ -80,27 +80,27 @@ class HodgkinHuxley_RK4(BaseNeuron):
                                     %(type)s V_K,  %(type)s V_l,  %(type)s g_Na,
                                     %(type)s g_K,  %(type)s g_l)
     {
-        return (-1/C_m) * (g_K*n*n*n*n*(V-V_K) + g_Na*m*m*m*h*(V-V_Na) + g_l*(V-V_l)-I);
+        return (1/C_m) * (I + g_K*n*n*n*n*(V-V_K) - g_Na*m*m*m*h*(V-V_Na) - g_l*(V-V_l));
     }
 
     __device__ %(type)s compute_dn(%(type)s V, %(type)s n)
     {
-        %(type)s alpha_n = (0.01*(V+10.0)) / (exp((V+10.0)/10.0)-1);
-        %(type)s beta_n = 0.125 * exp(V/80.0);
+        %(type)s alpha_n = (0.01*(V+50.0)) / (1-exp(-1*(V+50.0)/10.0));
+        %(type)s beta_n = 0.125 * exp(-1*(V+60.0)/80.0);
         return (alpha_n * (1-n) - beta_n * n);
     }
 
     __device__ %(type)s compute_dm(%(type)s V, %(type)s m)
     {
-        %(type)s alpha_m = (0.1*(V+25.0)) / (exp((V+25.0)/10.0) - 1);
-        %(type)s beta_m = 4 * exp(V/18.0);
+        %(type)s alpha_m = (0.1*(V+35.0)) / (1-exp(-1*(V+35.0)/10.0));
+        %(type)s beta_m = 4.0 * exp((-0.0556)*(V+60.0));
         return (alpha_m * (1-m) - beta_m * m);
     }
 
     __device__ %(type)s compute_dh(%(type)s V, %(type)s h)
     {
-        %(type)s alpha_h = 0.07 * exp(V/20.0);
-        %(type)s beta_h = 1 / (exp((V+30.0)/10.0) + 1);
+        %(type)s alpha_h = 0.07 * exp((-0.05)*(V+60.0));
+        %(type)s beta_h = 1 / (1+exp((-0.1)*(V+30.0)));
         return (alpha_h * (1-h) - beta_h * h);
     }
 
