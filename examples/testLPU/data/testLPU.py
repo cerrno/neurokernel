@@ -81,12 +81,8 @@ G.node[2] = {
         'initn': 0.03       
         }
 
-#HH Neuron Setup; LUCAS YOULL WANT TO LOOK AT THIS PART TO SET UP THE CONSTANTS
-#I used the constants from matlab in neuroscience from my previous exercises
-
 # Added updated constants from paper (Siciliano), but left initial volatge because I am too lazy to calcluate
 # it again using the constants
-
 G.node[3] = {
         'model': 'HodgkinHuxley_RK4',
         'name': 'neuron_3',
