@@ -5,11 +5,12 @@
 from neurokernel.core import Manager
 from neurokernel.LPU.LPU import LPU
 from neurokernel.tools.comm import get_random_port
+import neurokernel.base as base
 
 dt = 1e-4
 dur = 1.0
 Nt = int(dur/dt)
-
+logger = base.setup_logger(file_name='neurokernel.log', screen=False)
 port_data = get_random_port()
 port_ctrl = get_random_port()
 
