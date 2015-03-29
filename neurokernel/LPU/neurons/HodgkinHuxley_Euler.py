@@ -9,10 +9,10 @@ import pycuda.driver as cuda
 from pycuda.compiler import SourceModule
 
 
-class HodgkinHuxley_RK4(BaseNeuron):
+class HodgkinHuxley_Euler(BaseNeuron):
     '''
     LVS Hodgkin-Huxley neural model
-    Runge-Kutta 4th order multivariable integration scheme
+    Interpolated Euler integration scheme
 
     Quantities
         initV:  membrane potential voltage
@@ -33,8 +33,11 @@ class HodgkinHuxley_RK4(BaseNeuron):
 
         self.num_neurons = len(n_dict['id'])
         self.dt = np.double(dt)
-        self.debug = debug
+        self.steps = max(int(round(dt / 1e-5)), 1)
         self.LPU_id = LPU_id
+        self.debug = debug
+
+        self.ddt = dt / self.steps
 
         self.V = V
 
@@ -51,7 +54,7 @@ class HodgkinHuxley_RK4(BaseNeuron):
         self.g_l = garray.to_gpu(np.asarray(n_dict['g_l'], dtype=np.float64))
 
         cuda.memcpy_htod(int(self.V), np.asarray(n_dict['initV'], dtype=np.double))
-        self.update = self.get_HH_rk4_kernel()
+        self.update = self.get_HH_euler_kernel()
 
 
     @property
@@ -61,13 +64,13 @@ class HodgkinHuxley_RK4(BaseNeuron):
         self.update.prepared_async_call(
             self.update_grid, self.update_block, st,
             self.V, self.n.gpudata, self.m.gpudata, self.h.gpudata,
-            self.num_neurons, self.I.gpudata, self.dt*1000,
+            self.num_neurons, self.I.gpudata, self.ddt*1000, self.steps,
             self.C_m.gpudata, self.V_Na.gpudata, self.V_K.gpudata,
             self.V_l.gpudata, self.g_Na.gpudata, self.g_K.gpudata,
             self.g_l.gpudata)
 
 
-    def get_HH_rk4_kernel(self):
+    def get_HH_euler_kernel(self):
         template = """
 
     #define NVAR 2
@@ -114,8 +117,8 @@ class HodgkinHuxley_RK4(BaseNeuron):
 
     // main kernel
     __global__ void
-    hodgkin_huxley_rk4(%(type)s* g_V, %(type)s* g_n, %(type)s* g_m, %(type)s* g_h,
-                        int num_neurons, %(type)s* I_pre, %(type)s dt,
+    hodgkin_huxley_euler(%(type)s* g_V, %(type)s* g_n, %(type)s* g_m, %(type)s* g_h,
+                        int num_neurons, %(type)s* I_pre, %(type)s dt, int nsteps,
                         %(type)s* C_m, %(type)s* V_Na, %(type)s* V_K,
                         %(type)s* V_l, %(type)s* g_Na, %(type)s* g_K,
                         %(type)s* g_l)
@@ -133,52 +136,23 @@ class HodgkinHuxley_RK4(BaseNeuron):
             m = g_m[cart_id];
             h = g_h[cart_id];
 
-            %(type)s k1_V, k2_V, k3_V, k4_V;
-            %(type)s k1_n, k2_n, k3_n, k4_n;
-            %(type)s k1_m, k2_m, k3_m, k4_m;
-            %(type)s k1_h, k2_h, k3_h, k4_h;
+            %(type)s dV, dn, dm, dh;
 
-            // RK4 using device derivative calculation functions
-
-            // LVS TODO: Could storing the values of x+0.5*k1_x
-            // help to optimize the program?
-            k1_V = dt * compute_dV(V, n, m, h,
+            for(int i = 0; i < nsteps; ++i)
+            {
+                dV = compute_dV(V, n, m, h,
                                     I, C_m[cart_id], V_Na[cart_id],
                                     V_K[cart_id], V_l[cart_id], g_Na[cart_id],
                                     g_K[cart_id], g_l[cart_id]);
-            k1_n = dt * compute_dn(V, n);
-            k1_m = dt * compute_dm(V, m);
-            k1_h = dt * compute_dh(V, h);
+                dn = compute_dn(V, n);
+                dm = compute_dm(V, m);
+                dh = compute_dh(V, h);
 
-            k2_V = dt * compute_dV(V+0.5*k1_V, n+0.5*k1_n, m+0.5*k1_m, h+0.5*k1_h,
-                                    I, C_m[cart_id], V_Na[cart_id],
-                                    V_K[cart_id], V_l[cart_id], g_Na[cart_id],
-                                    g_K[cart_id], g_l[cart_id]);
-            k2_n = dt * compute_dn(V+0.5*k1_V, n+0.5*k1_n);
-            k2_m = dt * compute_dm(V+0.5*k1_V, m+0.5*k1_m);
-            k2_h = dt * compute_dh(V+0.5*k1_V, h+0.5*k1_h);
-
-            k3_V = dt * compute_dV(V+0.5*k2_V, n+0.5*k2_n, m+0.5*k2_m, h+0.5*k2_h,
-                                    I, C_m[cart_id], V_Na[cart_id],
-                                    V_K[cart_id], V_l[cart_id], g_Na[cart_id],
-                                    g_K[cart_id], g_l[cart_id]);
-            k3_n = dt * compute_dn(V+0.5*k2_V, n+0.5*k2_n);
-            k3_m = dt * compute_dm(V+0.5*k2_V, m+0.5*k2_m);
-            k3_h = dt * compute_dh(V+0.5*k2_V, h+0.5*k2_h);
-
-            k4_V = dt * compute_dV(V+k3_V, n+k3_n, m+k3_m, h+k3_h,
-                                    I, C_m[cart_id], V_Na[cart_id],
-                                    V_K[cart_id], V_l[cart_id], g_Na[cart_id],
-                                    g_K[cart_id], g_l[cart_id]);
-            k4_n = dt * compute_dn(V+k3_V, n+k3_n);
-            k4_m = dt * compute_dm(V+k3_V, m+k3_m);
-            k4_h = dt * compute_dh(V+k3_V, h+k3_h);
-
-            // compute new quantities
-            V += (k1_V + 2*(k2_V + k3_V) + k4_V)/6.0;
-            n += (k1_n + 2*(k2_n + k3_n) + k4_n)/6.0;
-            m += (k1_m + 2*(k2_m + k3_m) + k4_m)/6.0;
-            h += (k1_h + 2*(k2_h + k3_h) + k4_h)/6.0;
+                V += dt * dV;
+                n += dt * dn;
+                m += dt * dm;
+                h += dt * dh;
+            }
 
             g_V[cart_id] = V;
             g_n[cart_id] = n;
@@ -196,10 +170,10 @@ class HodgkinHuxley_RK4(BaseNeuron):
         mod = SourceModule(template % {"type": dtype_to_ctype(dtype),
                            "nneu": self.update_block[0]},
                            options=["--ptxas-options=-v"])
-        func = mod.get_function("hodgkin_huxley_rk4")
+        func = mod.get_function("hodgkin_huxley_euler")
 
         func.prepare([np.intp, np.intp, np.intp, np.intp,
-                      np.int32, np.intp, scalartype,
+                      np.int32, np.intp, scalartype, np.int32,
                       np.intp, np.intp, np.intp,
                       np.intp, np.intp, np.intp,
                       np.intp])
