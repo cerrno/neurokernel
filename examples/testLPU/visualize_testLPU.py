@@ -45,7 +45,7 @@ V.add_plot({'type': 'waveform', 'ids': {0:[2]}},
 V._update_interval = 50
 
 #rows and colums to plot in terms of size
-V.rows = 3
+V.rows = 5
 V.cols = 1 
 
 #self explantory
