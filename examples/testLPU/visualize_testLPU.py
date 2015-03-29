@@ -48,7 +48,7 @@ V.add_plot({'type': 'waveform', 'ids': {0:[2]}},
 V._update_interval = 50
 
 #rows and colums to plot in terms of size
-V.rows = 3
+V.rows = 5
 V.cols = 1 
 
 #self explantory
@@ -61,10 +61,12 @@ V.dt = 0.0001
 
 #Changes the sizes on the axis
 V.xlim = [0, 1.0]
-V.ylim = [-70.0, -40.0]
+V.ylim = [-70.0, 10.0]
 
 #figure size
-V.figsize = (12, 8)
+V.figsize = (16, 9)
+
+V.title = "Simple LPU Testing RK4 Models"
 
 #runs the visualizer
 V.run('simple_output.png', 120)
