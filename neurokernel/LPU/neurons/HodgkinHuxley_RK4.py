@@ -14,6 +14,9 @@ class HodgkinHuxley_RK4(BaseNeuron):
     LVS Hodgkin-Huxley neural model
     Runge-Kutta 4th order multivariable integration scheme
 
+    Note: Requires shift of constants with initial voltage of -65 mV
+    Recommended time step of 2e-5 or less
+
     Quantities
         initV:  membrane potential voltage
         initn
