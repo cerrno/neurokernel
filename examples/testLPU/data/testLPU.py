@@ -81,8 +81,7 @@ G.node[2] = {
         'initn': 0.03       
         }
 
-# Added updated constants from paper (Siciliano), but left initial volatge because I am too lazy to calcluate
-# it again using the constants
+# Constants following Izhikevich with -65 mV shift
 G.node[3] = {
         'model': 'HodgkinHuxley_RK4',
         'name': 'neuron_3',
@@ -132,7 +131,7 @@ G.add_edge(0, 3, type='directed', attr_dict={
     'ar': 1.1*1e2,
     'ad': 1.9*1e3,
     'reverse': 65*1e-3,
-    'gmax': 0,
+    'gmax': 2*1e-3,
     'conductance': True
     })
 
