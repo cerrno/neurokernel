@@ -141,7 +141,7 @@ nx.write_gexf(G, 'simple_lpu.gexf.gz')
 #sets up input file
 
 #time step
-dt = 1e-5
+dt = 1e-4
 #duration
 dur = 1.0
 #number of datapoints
