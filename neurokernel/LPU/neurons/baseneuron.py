@@ -6,6 +6,7 @@ Base neuron class used by LPU.
 
 from abc import ABCMeta, abstractmethod, abstractproperty
 import os.path
+import neurokernel.LPU.neurons as neurons
 import numpy as np
 
 import pycuda.gpuarray as garray
@@ -104,6 +105,7 @@ class BaseNeuron(object):
             self.__I_file = tables.openFile(self.__LPU_id + "_I_" +  self.__class__.__name__ +  str(i) + ".h5", mode="w")
             self.__I_file.createEArray("/","array", \
                                      tables.Float64Atom(), (0,self.num_neurons))
+        self.cu_path = os.path.dirname(neurons.__file__)
             
     @abstractmethod
     def eval(self):
