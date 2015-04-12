@@ -1,1 +1,4 @@
-__device__ %(type)s integrate_euler()
+__device__ %(type)s integrate()
+{
+
+}
