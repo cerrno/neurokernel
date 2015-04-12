@@ -67,9 +67,6 @@ hodgkin_huxley_rk4(%(type)s* g_V, %(type)s* g_n, %(type)s* g_m, %(type)s* g_h,
         %(type)s k1_h, k2_h, k3_h, k4_h;
 
         // RK4 using device derivative calculation functions
-
-        // LVS TODO: Could storing the values of x+0.5*k1_x
-        // help to optimize the program?
         k1_V = dt * compute_dV(V, n, m, h,
                                 I, C_m[cart_id], V_Na[cart_id],
                                 V_K[cart_id], V_l[cart_id], g_Na[cart_id],
