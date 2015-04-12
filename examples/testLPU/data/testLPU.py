@@ -83,7 +83,7 @@ G.node[2] = {
 
 # Constants following Izhikevich with -65 mV shift
 G.node[3] = {
-        'model': 'HodgkinHuxley_RK4',
+        'model': 'HodgkinHuxley_Euler',
         'name': 'neuron_3',
         'extern': False,
         'public': True,
