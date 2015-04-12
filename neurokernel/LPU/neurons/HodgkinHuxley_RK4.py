@@ -74,7 +74,7 @@ class HodgkinHuxley_RK4(BaseNeuron):
 
 
     def get_HH_rk4_kernel(self):
-        template = open(self.cu_path+'/kernels/HH_RK4.cu')
+        template = open(self.cu_path+'/kernels/HH_RK4.cu').read()
         # Used 40 registers, 1024+0 bytes smem, 84 bytes cmem[0],
         # 308 bytes cmem[2], 28 bytes cmem[16]
         dtype = np.double
