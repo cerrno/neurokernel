@@ -166,7 +166,7 @@ if __name__ == '__main__':
     dur = 1.0
     start = 0.3
     stop = 0.6
-    I_max = 0.6
+    I_max = 10
     neu_num = [np.random.randint(31, 40) for i in xrange(3)]
     print neu_num
     create_input(args.in_file_name, neu_num[0], dt, dur, start, stop, I_max)
