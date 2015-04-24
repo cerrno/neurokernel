@@ -10,7 +10,7 @@ import neurokernel.base as base
 dt = 2e-5
 dur = 1.0
 Nt = int(dur/dt)
-logger = base.setup_logger(file_name='neurokernel.log', screen=False)
+#logger = base.setup_logger(file_name='neurokernel.log', screen=False)
 port_data = get_random_port()
 port_ctrl = get_random_port()
 

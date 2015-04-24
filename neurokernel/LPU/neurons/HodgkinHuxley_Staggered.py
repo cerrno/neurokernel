@@ -10,10 +10,11 @@ from pycuda.compiler import SourceModule
 import os.path
 import neurokernel.LPU.neurons as neurons
 
-class HodgkinHuxley_Euler(BaseNeuron):
+
+class HodgkinHuxley_RK4(BaseNeuron):
     '''
     LVS Hodgkin-Huxley neural model
-    Interpolated Euler integration scheme
+    Staggered Euler multivariable integration scheme
 
     Note: Requires shift of constants with initial voltage of -65 mV
 
@@ -36,12 +37,9 @@ class HodgkinHuxley_Euler(BaseNeuron):
 
         self.num_neurons = len(n_dict['id'])
         self.dt = np.double(dt)
-        self.steps = max(int(round(dt / 1e-5)), 1)
-        self.LPU_id = LPU_id
         self.debug = debug
+        self.LPU_id = LPU_id
         self.cu_path = os.path.dirname(neurons.__file__)
-
-        self.ddt = dt / self.steps
 
         self.V = V
 
@@ -58,7 +56,7 @@ class HodgkinHuxley_Euler(BaseNeuron):
         self.g_l = garray.to_gpu(np.asarray(n_dict['g_l'], dtype=np.float64))
 
         cuda.memcpy_htod(int(self.V), np.asarray(n_dict['initV'], dtype=np.double))
-        self.update = self.get_HH_euler_kernel()
+        self.update = self.get_HH_rk4_kernel()
 
 
     @property
@@ -68,13 +66,14 @@ class HodgkinHuxley_Euler(BaseNeuron):
         self.update.prepared_async_call(
             self.update_grid, self.update_block, st,
             self.V, self.n.gpudata, self.m.gpudata, self.h.gpudata,
-            self.num_neurons, self.I.gpudata, self.ddt*1000, self.steps,
+            self.num_neurons, self.I.gpudata, self.dt*1000,
             self.C_m.gpudata, self.V_Na.gpudata, self.V_K.gpudata,
             self.V_l.gpudata, self.g_Na.gpudata, self.g_K.gpudata,
             self.g_l.gpudata)
 
-    def get_HH_euler_kernel(self):
-        template = open(self.cu_path+'/kernels/HH_Euler.cu').read()
+
+    def get_HH_rk4_kernel(self):
+        template = open(self.cu_path+'/kernels/HH_Staggered.cu').read()
         # Used 40 registers, 1024+0 bytes smem, 84 bytes cmem[0],
         # 308 bytes cmem[2], 28 bytes cmem[16]
         dtype = np.double
@@ -84,12 +83,13 @@ class HodgkinHuxley_Euler(BaseNeuron):
         mod = SourceModule(template % {"type": dtype_to_ctype(dtype),
                            "nneu": self.update_block[0]},
                            options=["--ptxas-options=-v"])
-        func = mod.get_function("hodgkin_huxley_euler")
+        func = mod.get_function("hodgkin_huxley_rk4")
 
         func.prepare([np.intp, np.intp, np.intp, np.intp,
-                      np.int32, np.intp, scalartype, np.int32,
+                      np.int32, np.intp, scalartype,
                       np.intp, np.intp, np.intp,
                       np.intp, np.intp, np.intp,
                       np.intp])
+
 
         return func
