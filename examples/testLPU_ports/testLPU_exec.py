@@ -41,7 +41,7 @@ lpu_1 = LPU(dt, n_dict, s_dict, input_file=None, output_file='simple_output_1.h5
 
 #____________________________________________________________
 
-out_ports_gpot_0 = '/lpu_0/out/gpot/0'
+out_ports_gpot_0 = '/lpu_0/out/gpot/1'
 in_ports_gpot_1 = '/lpu_1/in/gpot/0'
 
 pat = Pattern(out_ports_gpot_0, in_ports_gpot_1)
