@@ -19,7 +19,7 @@ def create_lpu_0():
 
     G.node[0] = {
             'name': 'neuron_0',
-            'selector':'/a[0]', 
+            'selector':'/lpu_0/out/gpot/0', 
             'model': 'MorrisLecar_a',
             'extern': True, 
             'public': True, 
@@ -43,7 +43,7 @@ def create_lpu_0():
 
     G.node[1] = {
             'name': 'neuron_1',
-            'selector':'/lpu_0/out/gpot/0', 
+            'selector':'/lpu_0/out/gpot/1', 
             'model': 'MorrisLecar_a',
             'extern': False, 
             'public': True, 
@@ -105,7 +105,7 @@ def create_lpu_1():
             'extern': False, 
             'public': True, 
             'spiking': False, 
-            'selector':'/a[2]', 
+            'selector':'/lpu_1/out/gpot/0', 
             'V1': -1.2,
             'V2': 18.0,
             'V3': 2.0,
