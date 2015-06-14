@@ -143,6 +143,7 @@ class Module(BaseModule):
         self.data['gpot'] = data_gpot
         self.data['spike'] = data_spike
         self.pm = {}
+        print self.data['spike']
         self.pm['gpot'] = PortMapper(sel_gpot, self.data['gpot'])
         self.pm['spike'] = PortMapper(sel_spike, self.data['spike'])
 
@@ -297,15 +298,22 @@ class Module(BaseModule):
                         self.pm['gpot'].get_by_inds(self._out_port_dict_ids['gpot'][out_id])
                 else:
                     gpot_data = np.array([], self.pm['gpot'].dtype)
+
                 if len(self._out_port_dict_ids['spike'][out_id]):
                     spike_data = \
                         self.pm['spike'].get_by_inds(self._out_port_dict_ids['spike'][out_id])
+            '''
+            ACTUAL
                 else:
                     spike_data = np.array([], self.pm['spike'].dtype)
 
                 # Attempt to stage the emitted port data for transmission:            
                 try:
                     self._out_data.append((out_id, (gpot_data, spike_data)))
+            Modified: For some dumb reason, the system expects some spike data through ports
+            '''
+                try:
+                    self._out_data.append((out_id, gpot_data))
                 except:
                     self.log_info('no output data to [%s] sent' % out_id)
                 else:

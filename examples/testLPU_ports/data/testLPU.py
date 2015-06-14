@@ -19,7 +19,7 @@ def create_lpu_0():
 
     G.node[0] = {
             'name': 'neuron_0',
-            'selector':'/lpu_0/out/gpot/0', 
+            'selector':'/lpu_0/in/gpot/0', 
             'model': 'MorrisLecar_a',
             'extern': True, 
             'public': True, 
@@ -43,7 +43,7 @@ def create_lpu_0():
 
     G.node[1] = {
             'name': 'neuron_1',
-            'selector':'/lpu_0/out/gpot/1', 
+            'selector':'/lpu_0/out/gpot/0', 
             'model': 'MorrisLecar_a',
             'extern': False, 
             'public': True, 
@@ -155,7 +155,7 @@ start = 0.3
 stop = 0.6
 
 #the current input
-I_max = 6
+I_max = 60
 t = np.arange(0, dt*Nt, dt)
 I = np.zeros((Nt, 1), dtype=np.double)
 

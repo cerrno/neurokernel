@@ -18,27 +18,20 @@ V = vis.visualizer()
 V.add_LPU('./data/simple_input.h5', LPU='Input')
 V.add_plot({'type': 'waveform', 'ids': [[0]]}, 'input_Input')
 
-#takes in the spike data/potential from the neuron output and plots it
-V.add_LPU('simple_output_spike.h5',
-          './data/simple_lpu.gexf.gz', 'Simple LPU (Spikes)')
-
-#the [0,1] under ids should print both hh and leaky
-V.add_plot({'type':'raster', 'ids': {0: [0]},
-            'yticks': [0], 'yticklabels': [0]},
-            'Simple LPU (Spikes)','Output')
-
-V.add_LPU('simple_output_gpot.h5',
-          './data/simple_lpu.gexf.gz', 'Simple LPU (Graded Potential)')
+V.add_LPU('simple_output_0_gpot.h5',
+        './data/simple_lpu_0.gexf.gz', 'LPU1')
 
 V.add_plot({'type': 'waveform', 'ids': {0:[0]}},
-            'Simple LPU (Graded Potential)', 'Output')
+            'LPU1', 'Output')
 
 V.add_plot({'type': 'waveform', 'ids': {0:[1]}},
-            'Simple LPU (Graded Potential)', 'Output')
+            'LPU1', 'Output')
 
-V.add_plot({'type': 'waveform', 'ids': {0:[2]}},
-            'Simple LPU (Graded Potential)', 'Output')
+V.add_LPU('simple_output_1_gpot.h5',
+        './data/simple_lpu_1.gexf.gz', 'LPU2')
 
+V.add_plot({'type': 'waveform', 'ids': {0:[1]}},
+            'LPU2', 'Output')
 
 
 
@@ -66,8 +59,6 @@ V.ylim = [-70.0, 10.0]
 #figure size
 V.figsize = (16, 9)
 
-V.title = "Simple LPU Testing RK4 Models"
-
 #runs the visualizer
-V.run('simple_output.png', 120)
+V.run('simple_output_ports.png', 120)
 

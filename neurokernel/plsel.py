@@ -2247,7 +2247,7 @@ class PortMapper(BasePortMapper):
         """
         Port mapper data type.
         """
-        
+         
         return self.data.dtype
     @dtype.setter
     def dtype(self, d):
