@@ -41,15 +41,15 @@ lpu_1 = LPU(dt, n_dict, s_dict, input_file=None, output_file='simple_output_1.h5
 
 #____________________________________________________________
 
-out_ports_gpot_0 = '/lpu_0/out/gpot/1'
-in_ports_gpot_1 = '/lpu_1/in/gpot/0'
+out_ports_gpot_0 = '/lpu_0/out/gpot/0'
+in_ports_gpot_0 = '/lpu_1/in/gpot/0'
 
-pat = Pattern(out_ports_gpot_0, in_ports_gpot_1)
+pat = Pattern(out_ports_gpot_0, in_ports_gpot_0)
 
 pat.interface[out_ports_gpot_0] = [0, 'out', 'gpot']
-pat.interface[in_ports_gpot_1] = [1, 'in', 'gpot']
+pat.interface[in_ports_gpot_0] = [1, 'in', 'gpot']
 
-pat[out_ports_gpot_0, in_ports_gpot_1] = 1
+pat[out_ports_gpot_0, in_ports_gpot_0] = 1
 
 #_________________________________________________
 man = Manager(port_data, port_ctrl, port_time)

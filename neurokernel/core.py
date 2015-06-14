@@ -193,6 +193,7 @@ class Module(mpi.Worker):
         self.data['gpot'] = data_gpot
         self.data['spike'] = data_spike
         self.pm = {}
+        print self.data['spike']
         self.pm['gpot'] = PortMapper(sel_gpot, self.data['gpot'])
         self.pm['spike'] = PortMapper(sel_spike, self.data['spike'])
 
@@ -221,6 +222,123 @@ class Module(mpi.Worker):
             else:
                 atexit.register(self.gpu_ctx.pop)
                 self.log_info('GPU initialized')
+
+    @property
+    def N_gpot_ports(self):
+        """
+        Number of exposed graded-potential ports.
+        """
+
+        return len(self.interface.gpot_ports())
+
+    @property
+    def N_spike_ports(self):
+        """
+        Number of exposed spiking ports.
+        """
+
+        return len(self.interface.spike_ports())
+
+    def _get_in_data(self):
+        """
+        Get input data from incoming transmission buffer.
+
+        Populate the data arrays associated with a module's ports using input
+        data received from other modules.
+        """
+
+        if self.net in ['none', 'ctrl']:
+            self.log_info('not retrieving from input buffer')
+        else:
+            self.log_info('retrieving from input buffer')
+
+            # Since fan-in is not permitted, the data from all source modules
+            # must necessarily map to different ports; we can therefore write each
+            # of the received data to the array associated with the module's ports
+            # here without worry of overwriting the data from each source module:
+            for in_id in self._in_ids:
+                # Check for exceptions so as to not fail on the first emulation
+                # step when there is no input data to retrieve:
+                try:
+
+                    # The first entry of `data` contains graded potential values,
+                    # while the second contains spiking port values (i.e., 0 or
+                    # 1):
+                    data = self._in_data[in_id].popleft()
+                except:
+                    self.log_info('no input data from [%s] retrieved' % in_id)
+                else:
+                    self.log_info('input data from [%s] retrieved' % in_id)
+
+                    # Assign transmitted values directly to port data array:
+                    if len(self._in_port_dict_ids['gpot'][in_id]):
+                        self.pm['gpot'].set_by_inds(self._in_port_dict_ids['gpot'][in_id], data[0])
+                    if len(self._in_port_dict_ids['spike'][in_id]):
+                        self.pm['spike'].set_by_inds(self._in_port_dict_ids['spike'][in_id], data[1])
+                    
+
+    def _put_out_data(self):
+        """
+        Put specified output data in outgoing transmission buffer.
+
+        Stage data from the data arrays associated with a module's ports for
+        output to other modules.
+
+        Notes
+        -----
+        The output spike port selection algorithm could probably be made faster.
+        """
+
+        if self.net in ['none', 'ctrl']:
+            self.log_info('not populating output buffer')
+        else:
+            self.log_info('populating output buffer')
+
+            # Clear output buffer before populating it:
+            self._out_data = []
+
+            # Select data that should be sent to each destination module and append
+            # it to the outgoing queue:
+            for out_id in self._out_ids:
+                # Select port data using list of graded potential ports that can
+                # transmit output:
+                if len(self._out_port_dict_ids['gpot'][out_id]):
+                    gpot_data = \
+                        self.pm['gpot'].get_by_inds(self._out_port_dict_ids['gpot'][out_id])
+                else:
+                    gpot_data = np.array([], self.pm['gpot'].dtype)
+
+                if len(self._out_port_dict_ids['spike'][out_id]):
+                    spike_data = \
+                        self.pm['spike'].get_by_inds(self._out_port_dict_ids['spike'][out_id])
+            '''
+            ACTUAL
+                else:
+                    spike_data = np.array([], self.pm['spike'].dtype)
+
+                # Attempt to stage the emitted port data for transmission:            
+                try:
+                    self._out_data.append((out_id, (gpot_data, spike_data)))
+            Modified: For some dumb reason, the system expects some spike data through ports
+            '''
+                try:
+                    self._out_data.append((out_id, gpot_data))
+                except:
+                    self.log_info('no output data to [%s] sent' % out_id)
+                else:
+                    self.log_info('output data to [%s] sent' % out_id)
+                
+    def run_step(self):
+        """
+        Module work method.
+    
+        This method should be implemented to do something interesting with new 
+        input port data in the module's `pm` attribute and update the attribute's
+        output port data if necessary. It should not interact with any other 
+        class attributes.
+        """
+
+        self.log_info('running execution step')
 
     def _init_port_dicts(self):
         """
