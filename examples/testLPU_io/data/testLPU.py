@@ -14,78 +14,6 @@ def create_lpu_0():
     #sets up neurons/networks
     G = nx.DiGraph()
 
-        #sets up node connections in graph
-    G.add_nodes_from([0,1])
-
-    G.node[0] = {
-            'name': 'neuron_0',
-            'selector':'/lpu_0/in/gpot/0', 
-            'model': 'MorrisLecar_a',
-            'extern': True, 
-            'public': True, 
-            'spiking': False, 
-            'V1': -1.2,
-            'V2': 18.0,
-            'V3': 2.0,
-            'V4': 30.0,
-            'V_l': -60.0, 
-            'V_ca': 120.0, 
-            'V_k': -84.0, 
-            'G_l': 2.0, 
-            'G_ca': 4.0, 
-            'G_k': 8.0,
-            'phi': 0.04, 
-            'offset': 0.0,
-            'initV': -50.0,
-            'initn': 0.03       
-        }
-
-
-    G.node[1] = {
-            'name': 'neuron_1',
-            'selector':'/lpu_0/out/gpot/0', 
-            'model': 'MorrisLecar_a',
-            'extern': False, 
-            'public': True, 
-            'spiking': False, 
-            'V1': -1.2,
-            'V2': 18.0,
-            'V3': 2.0,
-            'V4': 30.0,
-            'V_l': -60.0, 
-            'V_ca': 120.0, 
-            'V_k': -84.0, 
-            'G_l': 2.0, 
-            'G_ca': 4.0, 
-            'G_k': 8.0,
-            'phi': 0.04, 
-            'offset': 0.0,
-            'initV': -50.0,
-            'initn': 0.03       
-        }
-
-    #From input to output
-    G.add_edge(0, 1, type='directed', attr_dict={
-        'name': G.node[0]['name']+'-'+G.node[1]['name'],
-        'model'       : 'power_gpot_gpot_sig',
-        'class'       : 3,
-        'slope'       : 0.8,
-        'threshold'   : -45,
-        'power'       : 10.0,
-        'saturation'  : 30.0,
-        'delay'       : 1.0,
-        'reverse'     : -0.08,
-        'conductance' : True})
-
-    nx.write_gexf(G, 'simple_lpu_0.gexf.gz')
-
-
-
-
-def create_lpu_1():
-    #sets up neurons/networks
-    G = nx.DiGraph()
-
     #sets up node connections in graph
     G.add_nodes_from([0,1])
 
@@ -165,6 +93,4 @@ I[np.logical_and(t > start, t < stop)] = I_max
 with h5py.File('simple_input.h5', 'w') as f: 
     f.create_dataset('array', (Nt, 1), dtype = np.double, data = I)
 
-
 create_lpu_0()
-create_lpu_1()
