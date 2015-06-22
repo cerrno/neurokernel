@@ -16,7 +16,7 @@ from neurokernel.tools.comm import get_random_port
 
 class io_interface(Module):
     
-    def __init__(self, num_ports, id, device):
+    def __init__(self, num_ports, id, device, port_data, port_ctrl, port_time):
 
         self.num_ports = num_ports
         self.cached_data = np.zeros(num_ports)
@@ -42,7 +42,7 @@ class io_interface(Module):
 
         super(io_interface, self).__init__(sel, sel, data_gpot=np.zeros(count, np.float64),
                                     columns=['interface', 'io', 'type'], port_data=port_data, 
-                                    port_ctrl=port_ctrl, id=id, device=device)
+                                    port_ctrl=port_ctrl, port_time=port_time, id=id, device=device)
 
 
     def get_data(array_data):
@@ -51,7 +51,6 @@ class io_interface(Module):
         self.cached_data = array_data
 
     def send_data():
-        # Output random graded potential data:
         out_gpot_ports = self.interface.out_ports().gpot_ports().to_tuples()
         self.pm['gpot'][out_gpot_ports] = self.cached_data
 
