@@ -30,4 +30,6 @@ man.add_mod(lpu)
 
 man.start(steps=Nt)
 
+print "HELLO"
+
 man.stop()
