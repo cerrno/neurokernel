@@ -311,18 +311,12 @@ class Module(mpi.Worker):
                 if len(self._out_port_dict_ids['spike'][out_id]):
                     spike_data = \
                         self.pm['spike'].get_by_inds(self._out_port_dict_ids['spike'][out_id])
-            '''
-            ACTUAL
                 else:
                     spike_data = np.array([], self.pm['spike'].dtype)
 
                 # Attempt to stage the emitted port data for transmission:            
                 try:
                     self._out_data.append((out_id, (gpot_data, spike_data)))
-            Modified: For some dumb reason, the system expects some spike data through ports
-            '''
-                try:
-                    self._out_data.append((out_id, gpot_data))
                 except:
                     self.log_info('no output data to [%s] sent' % out_id)
                 else:
