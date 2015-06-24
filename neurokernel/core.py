@@ -143,7 +143,6 @@ class Module(BaseModule):
         self.data['gpot'] = data_gpot
         self.data['spike'] = data_spike
         self.pm = {}
-        print self.data['spike']
         self.pm['gpot'] = PortMapper(sel_gpot, self.data['gpot'])
         self.pm['spike'] = PortMapper(sel_spike, self.data['spike'])
 
@@ -255,7 +254,7 @@ class Module(BaseModule):
                     # The first entry of `data` contains graded potential values,
                     # while the second contains spiking port values (i.e., 0 or
                     # 1):
-                    data = self._in_data[in_id].popleft()
+                    data = self._in_data[in_id].popleft() 
                 except:
                     self.log_info('no input data from [%s] retrieved' % in_id)
                 else:
@@ -302,12 +301,17 @@ class Module(BaseModule):
                 if len(self._out_port_dict_ids['spike'][out_id]):
                     spike_data = \
                         self.pm['spike'].get_by_inds(self._out_port_dict_ids['spike'][out_id])
+                '''
+                SAME AS BEFORE
                 else:
                     spike_data = np.array([], self.pm['spike'].dtype)
 
-                # Attempt to stage the emitted port data for transmission:            
                 try:
                     self._out_data.append((out_id, (gpot_data, spike_data)))
+                # Attempt to stage the emitted port data for transmission:            
+                '''
+                try:
+                    self._out_data.append((out_id, (gpot_data)))
                 except:
                     self.log_info('no output data to [%s] sent' % out_id)
                 else:

@@ -165,7 +165,6 @@ class BaseNeuron(object):
         if self.debug:
             self.__I_file.root.array.append(self.I.get().reshape((1, -1)))
 
-
     def post_run(self):
         '''
         This method will be called at the end of the simulation.

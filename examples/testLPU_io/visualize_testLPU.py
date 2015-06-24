@@ -15,18 +15,6 @@ nx.readwrite.gexf.GEXF.convert_bool = {'false':False, 'False':False,
 V = vis.visualizer()
 
 #takes in the input file as defined in data, and plots it
-V.add_LPU('./data/simple_input.h5', LPU='Input')
-V.add_plot({'type': 'waveform', 'ids': [[0]]}, 'input_Input')
-
-V.add_LPU('simple_output_0_gpot.h5',
-        './data/simple_lpu_0.gexf.gz', 'LPU1')
-
-V.add_plot({'type': 'waveform', 'ids': {0:[0]}},
-            'LPU1', 'Output')
-
-V.add_plot({'type': 'waveform', 'ids': {0:[1]}},
-            'LPU1', 'Output')
-
 V.add_LPU('simple_output_1_gpot.h5',
         './data/simple_lpu_1.gexf.gz', 'LPU2')
 

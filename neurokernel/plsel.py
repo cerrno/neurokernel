@@ -1135,6 +1135,7 @@ class SelectorMethods(SelectorParser):
         """
 
         assert len(selectors) >= 1
+        
         assert all(map(cls.is_selector, selectors))
         if len(selectors) == 1: return True
         assert all(map(lambda s: not cls.is_ambiguous(s), selectors))
@@ -2166,6 +2167,9 @@ class PortMapper(BasePortMapper):
 
         self._data = None
         if data is None:
+            self.data = None
+        #Bug fix: allows for empty spike data
+        elif len(data) == 0:
             self.data = None
         else:
             if np.ndim(data) == 0:
