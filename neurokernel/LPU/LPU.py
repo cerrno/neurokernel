@@ -521,23 +521,17 @@ class LPU(Module):
         data_gpot = np.zeros(self.num_public_gpot + len(in_ports_ids_gpot),
                              np.double)
         data_spike = np.zeros(self.num_public_spike + len(in_ports_ids_spk),
-                              np.int32)
-        super(LPU, self).__init__(sel=sel, sel_in=sel_in, sel_out=sel_out,
-                                  sel_gpot=sel_gpot, sel_spike=sel_spk,
-                                  data_gpot=data_gpot, data_spike=data_spike,
-                                  columns=columns, ctrl_tag=ctrl_tag, gpot_tag=gpot_tag,
-                                  spike_tag=spike_tag, id=self.LPU_id,
-                                  rank_to_id=rank_to_id, routing_table=routing_table,
-                                  device=device, debug=debug, time_sync=time_sync)
+                              np.bool)
 
-        self.sel_in_gpot_ids = np.array(self.pm['gpot'].ports_to_inds(self.sel_in_gpot),
-                                        dtype=np.int32)
-        self.sel_out_gpot_ids = np.array(self.pm['gpot'].ports_to_inds(self.sel_out_gpot),
-                                        dtype=np.int32)
-        self.sel_in_spk_ids = np.array(self.pm['spike'].ports_to_inds(self.sel_in_spk),
-                                        dtype=np.int32)
-        self.sel_out_spk_ids = np.array(self.pm['spike'].ports_to_inds(self.sel_out_spk),
-                                        dtype=np.int32)
+        super(LPU, self).__init__(sel, sel_in, sel_out,
+                                  sel_gpot, sel_spk, data_gpot, data_spike,
+                                  columns, port_data, port_ctrl, port_time,
+                                  self.LPU_id, device, debug, time_sync)
+
+        self.sel_in_gpot_ids = self.pm['gpot'].ports_to_inds(self.sel_in_gpot)
+        self.sel_out_gpot_ids = self.pm['gpot'].ports_to_inds(self.sel_out_gpot)
+        self.sel_in_spk_ids = self.pm['spike'].ports_to_inds(self.sel_in_spk)
+        self.sel_out_spk_ids = self.pm['spike'].ports_to_inds(self.sel_out_spk)
 
     def pre_run(self):
         super(LPU, self).pre_run()

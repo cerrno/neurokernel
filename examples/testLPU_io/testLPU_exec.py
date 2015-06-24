@@ -7,6 +7,8 @@ from neurokernel.LPU.LPU import LPU
 from neurokernel.tools.comm import get_random_port
 import neurokernel.base as base
 
+from neurokernel.realtime_interface import io_interface
+
 from neurokernel.pattern import Pattern
 
 def tracefunc(frame, event, arg, indent=[0]):
@@ -34,7 +36,7 @@ port_time = get_random_port()
 #init the realtime interface
 
 num_ports = 1
-id = 'interface'
+id = 'interface_0'
 
 interface = io_interface(num_ports, id, 0, port_data, port_ctrl, port_time)
 
@@ -46,7 +48,7 @@ lpu_1 = LPU(dt, n_dict, s_dict, input_file=None, output_file='simple_output_1.h5
 
 #____________________________________________________________
 
-out_ports_gpot_0 =  id + '/out/gpot/0'
+out_ports_gpot_0 =  '/' + id + '/out/gpot/0'
 in_ports_gpot_0 = '/lpu_1/in/gpot/0'
 
 pat = Pattern(out_ports_gpot_0, in_ports_gpot_0)
