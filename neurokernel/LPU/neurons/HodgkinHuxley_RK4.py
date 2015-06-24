@@ -76,14 +76,6 @@ class HodgkinHuxley_RK4(BaseNeuron):
         template = open(self.cu_path+'/kernels/HH_RK4.cu').read()
         # Used 40 registers, 1024+0 bytes smem, 84 bytes cmem[0],
         # 308 bytes cmem[2], 28 bytes cmem[16]
-        self.update.prepared_async_call(
-            self.update_grid, self.update_block, st,
-            self.V, self.n.gpudata, self.m.gpudata, self.h.gpudata,
-            self.num_neurons, self.I.gpudata, self.dt,
-            self.C_m.gpudata, self.V_Na.gpudata, self.V_K.gpudata,
-            self.V_l.gpudata, self.g_Na.gpudata, self.g_K.gpudata,
-            self.g_l.gpudata)
-
         dtype = np.double
         scalartype = dtype.type if dtype.__class__ is np.dtype else dtype
         self.update_block = (128, 1, 1)
@@ -98,9 +90,4 @@ class HodgkinHuxley_RK4(BaseNeuron):
                       np.intp, np.intp, np.intp,
                       np.intp, np.intp, np.intp,
                       np.intp])
-        # LVS TODO: ensure match for above newly specified HH arguments
-        func.prepare([np.intp, np.intp, np.int32, np.intp, scalartype,
-                      np.int32, np.intp, np.intp, np.intp,
-                      np.intp, np.intp, np.intp])
-
         return func

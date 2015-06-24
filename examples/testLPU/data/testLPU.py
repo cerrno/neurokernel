@@ -19,7 +19,6 @@ G.add_nodes_from([0,3])
 
 
 #The default leaky that leads to all of the others
-
 G.node[0] = {
         'model' : 'LeakyIAF',
         'name' : 'neuron_0', 
@@ -37,7 +36,6 @@ G.node[0] = {
 #MorrisLecar updated
 G.node[1] = {
         'model' : 'MorrisLecar_RK4',
-        #'model' : 'MorrisLecar', 
         'name' : 'neuron_1', 
         'extern': False, 
         'public': True, 
@@ -102,7 +100,7 @@ G.node[3] = {
         'g_Na': 120,
         'g_K': 36,
         'g_l': 0.3
-       }
+        }
 
 G.add_edge(0, 1, type='directed', attr_dict={
     'model': 'AlphaSynapse', 
@@ -126,17 +124,16 @@ G.add_edge(0, 2, type='directed', attr_dict={
     'conductance': True
     })
 
-
-#G.add_edge(0, 3, type='directed', attr_dict={
-#    'model': 'AlphaSynapse',
-#    'name': 'synapse_0_3',
-#    'class': 0,
-#    'ar': 1.1*1e2,
-#    'ad': 1.9*1e3,
-#    'reverse': 65*1e-3,
-#    'gmax': 2*1e-3,
-#    'conductance': True
-#    })
+G.add_edge(0, 3, type='directed', attr_dict={
+    'model': 'AlphaSynapse',
+    'name': 'synapse_0_3',
+    'class': 0,
+    'ar': 1.1*1e2,
+    'ad': 1.9*1e3,
+    'reverse': 65*1e-3,
+    'gmax': 2*1e-3,
+    'conductance': True
+    })
 
 nx.write_gexf(G, 'simple_lpu.gexf.gz')
 

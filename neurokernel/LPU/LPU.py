@@ -444,6 +444,7 @@ class LPU(Module):
                              np.double)
         data_spike = np.zeros(self.num_public_spike + len(in_ports_ids_spk),
                               np.bool)
+
         super(LPU, self).__init__(sel, sel_in, sel_out,
                                   sel_gpot, sel_spk, data_gpot, data_spike,
                                   columns, port_data, port_ctrl, port_time,

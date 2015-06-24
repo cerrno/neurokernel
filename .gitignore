@@ -19,6 +19,7 @@ neurokernel/neurokernel.log
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .idea/
 *.swp
 build/
@@ -30,3 +31,9 @@ dist/
 .idea/
 *.swp
 >>>>>>> Update parameters for Morris-Lecar testing
+=======
+.idea/
+*.swp
+build/
+dist/
+>>>>>>> 9e20d472f5727b3f025129bf78859c0b1a14a177

@@ -38,7 +38,6 @@ class MorrisLecar_RK4(BaseNeuron):
 
         cuda.memcpy_htod(int(self.V), np.asarray(n_dict['initV'],
                      dtype=np.double))
-                                         
         self.update = self.get_rk4_kernel()
 
 
