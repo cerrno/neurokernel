@@ -38,7 +38,6 @@ class MorrisLecar_a(BaseNeuron):
                          dtype=np.double))
         self.update = self.get_euler_kernel()
 
-
     @property
     def neuron_class(self): return True
 

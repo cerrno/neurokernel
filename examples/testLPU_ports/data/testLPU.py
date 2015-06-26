@@ -155,7 +155,7 @@ start = 0.3
 stop = 0.6
 
 #the current input
-I_max = 60
+I_max = 10
 t = np.arange(0, dt*Nt, dt)
 I = np.zeros((Nt, 1), dtype=np.double)
 

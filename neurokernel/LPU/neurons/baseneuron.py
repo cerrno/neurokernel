@@ -106,7 +106,7 @@ class BaseNeuron(object):
             self.__I_file.createEArray("/","array", \
                                      tables.Float64Atom(), (0,self.num_neurons))
         self.cu_path = os.path.dirname(neurons.__file__)
-            
+
     @abstractmethod
     def eval(self):
         '''

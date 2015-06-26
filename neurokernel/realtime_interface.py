@@ -23,7 +23,7 @@ class io_interface(Module):
         '''
         FOR TESTING
         '''
-        #self._cached_data.fill(60)
+        self._cached_data.fill(0)
         self.selector_array = []
 
         #generate output ports

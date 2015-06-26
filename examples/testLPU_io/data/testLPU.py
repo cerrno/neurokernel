@@ -28,27 +28,24 @@ def create_lpu_0():
 
     #MorrisLecar updated
     G.node[1] = {
-            'model': 'MorrisLecar_a',
-            'name': 'neuron_1',
-            'extern': False, 
-            'public': True, 
-            'spiking': False, 
-            'selector':'/lpu_1/out/gpot/0', 
-            'V1': -1.2,
-            'V2': 18.0,
-            'V3': 2.0,
-            'V4': 30.0,
-            'V_l': -60.0, 
-            'V_ca': 120.0, 
-            'V_k': -84.0, 
-            'G_l': 2.0, 
-            'G_ca': 4.0, 
-            'G_k': 8.0,
-            'phi': 0.04, 
-            'offset': 0.0,
-            'initV': -50.0,
-            'initn': 0.03       
-        }
+        'model': 'HodgkinHuxley_RK4',
+        'name': 'neuron_1',
+        'extern': False, 
+        'public': True, 
+        'spiking': False, 
+        'selector':'/lpu_1/out/gpot/0', 
+        'initV': -65.0,
+        'initn': 0.0003,
+        'initm': 0.0011,
+        'inith': 0.9998,
+        'C_m': 1,
+        'V_Na': 55,
+        'V_K': -77,
+        'V_l': -54.4,
+        'g_Na': 120,
+        'g_K': 36,
+        'g_l': 0.3
+    }
 
         
     #From input port to output
@@ -61,7 +58,7 @@ def create_lpu_0():
         'power'       : 10.0,
         'saturation'  : 30.0,
         'delay'       : 1.0,
-        'reverse'     : -0.08,
+        'reverse'     : 0,
         'conductance' : True})
 
 

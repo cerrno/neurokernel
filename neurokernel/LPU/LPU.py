@@ -597,7 +597,7 @@ class LPU(Module):
         self.synapse_state = garray.zeros(
             int(self.total_synapses) + len(self.input_neuron_list), 
             np.float64)
-        
+
         if self.my_num_gpot_neurons > 0:
             self.V = garray.zeros(int(self.my_num_gpot_neurons), np.float64)
         else:
