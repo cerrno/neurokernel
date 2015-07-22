@@ -21,6 +21,21 @@ V.add_LPU('simple_output_1_gpot.h5',
 V.add_plot({'type': 'waveform', 'ids': {0:[1]}},
             'LPU2', 'Output')
 
+V.add_plot({'type': 'waveform', 'ids': {0:[31]}},
+            'LPU2', 'Output')
+
+V.add_plot({'type': 'waveform', 'ids': {0:[51]}},
+            'LPU2', 'Output')
+
+V.add_plot({'type': 'waveform', 'ids': {0:[71]}},
+            'LPU2', 'Output')
+
+V.add_plot({'type': 'waveform', 'ids': {0:[91]}},
+            'LPU2', 'Output')
+
+
+
+
 
 
 #vars for plots
@@ -48,5 +63,5 @@ V.ylim = [-70.0, 10.0]
 V.figsize = (16, 9)
 
 #runs the visualizer
-V.run('simple_output_ports.png', 120)
+V.run('simple_output_ports1.png', 120)
 

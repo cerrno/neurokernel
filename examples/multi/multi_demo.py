@@ -19,6 +19,8 @@ from neurokernel.tools.comm import get_random_port
 import neurokernel.pattern as pattern
 from neurokernel.LPU.LPU import LPU
 
+logger = base.setup_logger(file_name='neurokernel.log', screen=False)
+
 # Execution parameters:
 dt = 1e-4
 dur = 1.0

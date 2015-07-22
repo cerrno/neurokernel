@@ -357,6 +357,7 @@ class Module(BaseModule):
                                               'gpot', 'gpot')
             self._out_port_dict_ids['gpot'][out_id] = \
                 self.pm['gpot'].ports_to_inds(self._out_port_dict['gpot'][out_id])
+
             self._out_port_dict['spike'][out_id] = \
                 self.patterns[out_id].src_idx(from_int, to_int,
                                               'spike', 'spike')
