@@ -38,6 +38,7 @@ class MorrisLecar_a(BaseNeuron):
                          dtype=np.double))
         self.update = self.get_euler_kernel()
 
+
     @property
     def neuron_class(self): return True
 
@@ -125,10 +126,10 @@ class MorrisLecar_a(BaseNeuron):
         func = mod.get_function("hhn_euler_multiple")
 
 
-        func.prepare([np.intp, np.intp, np.int32, np.intp, scalartype, 
-                      np.int32, np.intp, np.intp, np.intp, np.intp, 
-                      np.intp, np.intp, np.intp, np.intp, np.intp,
-                      np.intp, np.intp, np.intp])
+        func.prepare('PPiP'+np.dtype(dtype).char+'iPPPPPPPPPPPP')#[np.intp, np.intp, np.int32, np.intp, scalartype, 
+        #              np.int32, np.intp, np.intp, np.intp, np.intp, 
+        #              np.intp, np.intp, np.intp, np.intp, np.intp,
+        #              np.intp, np.intp, np.intp])
 
 
         return func

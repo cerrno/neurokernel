@@ -755,7 +755,7 @@ class LPU(Module):
         mod = SourceModule(template % {"type": dtype_to_ctype(self.V.dtype)},
                            options=self.compile_options)
         func = mod.get_function("extract_projection")
-        func.prepare([np.intp, np.intp, np.intp, np.int32])
+        func.prepare('PPPi')#[np.intp, np.intp, np.intp, np.int32])
         self.block_extract = (256, 1, 1)
         self.grid_extract_gpot = (min(6 * cuda.Context.get_device().MULTIPROCESSOR_COUNT,\
                             (self.num_public_gpot-1) / 256 + 1), 1)
@@ -784,7 +784,7 @@ class LPU(Module):
             template % {"type": dtype_to_ctype(self.spike_state.dtype)},
             options=self.compile_options)
         func = mod.get_function("extract_projection")
-        func.prepare([np.intp, np.intp, np.intp, np.int32])
+        func.prepare('PPPi')#[np.intp, np.intp, np.intp, np.int32])
         self.block_extract = (256, 1, 1)
         self.grid_extract_spike = (
             min(6 * cuda.Context.get_device().MULTIPROCESSOR_COUNT,
