@@ -490,6 +490,8 @@ class LPU(Module):
 
         if self.input_file is not None:
             self._read_external_input()
+        else:
+            self._read_realtime_input()
 
         if not self.first_step:
             for neuron in self.neurons:
@@ -680,6 +682,14 @@ class LPU(Module):
             self.output_spike_file.root.array.append(
                 self.spike_state.get()[self.spike_order].reshape((1, -1)))
 
+    def _read_realtime_input(self): 
+        """
+        Code to run for realtime simulation with sockets.
+        """
+
+        pass
+        
+
     def _read_external_input(self):
         # if eof not reached or there are frames in buffer not read
         # copy the input from buffer to synapse state array
@@ -705,6 +715,10 @@ class LPU(Module):
                     self.file_pointer,
                     self.file_pointer + self._one_time_import)
             if h_ext.shape[0] == self.I_ext.shape[0]:
+                print h_ext
+                print h_ext.shape[0]
+                print self.I_ext.shape[0]
+                print self._one_time_import
                 self.I_ext.set(h_ext)
                 self.file_pointer += self._one_time_import
                 self.frame_count = 0

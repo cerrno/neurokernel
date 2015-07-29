@@ -26,9 +26,11 @@ import threading
 import socket
 import time
 
+import LPU
+
 from Queue import Queue
 
-class io_interface(Module):
+class io_interface(LPU):
 
     _input_data = []
 
@@ -62,71 +64,50 @@ class io_interface(Module):
             temp = " ".join(map(str,self.__class__._input_data))
             self.log_info("Thread 1: %s" % temp)
 
-    def __init__(self, num_ports, id, device, port_data, port_ctrl, port_time, filename=None):
+    def __init__(self, dt, n_dict, s_dict, input_file, output_file, port_ctrl, port_data, port_time, device, id, debug, num_ports):
+
         self.num_ports = num_ports
         self._cached_data = np.zeros(num_ports)
         
-        self.filename = filename
-
         #Baked
-        if filename:
-            self.__class__._input_data = si.read_array('./data/simple_input.h5')
-            self.index = 0
-        #Realtime
-        else:
+        if !input_file:
             init = np.zeros(num_ports, np.float64)
             self.__class__._input_data.append(init)
+        else:
+            self.input_file = input_file
+            self.index = 0
            
-        self.selector_array = []
+        super(io_interface, self).__init__(self, dt, n_dict, s_dict, input_file, output_file, port_ctrl, port_data, port_time, device, id, debug)
 
-        #generate output ports
-        for i in range(0, num_ports):
-            selector_name = '/' + id + '/out/gpot/' + str(i)
-            self.selector_array.append(selector_name)
-
-        selector_in_string = ','.join(self.selector_array)
-
-        selector_out_string = '/' + id+'/in/gpot/0'
-        self.selector_array.append(selector_out_string)
-
-        selector_total_string = ','.join(self.selector_array)
-
-        count = len(self.selector_array)
-
-        super(io_interface, self).__init__(selector_total_string, selector_in_string, selector_out_string, sel_gpot = selector_total_string, sel_spike='', data_gpot=np.zeros(count, np.float64), data_spike = [], columns=['interface', 'io', 'type'], port_data=port_data, port_ctrl=port_ctrl, port_time=port_time, id=id, device=device)
-
-        for selector_name in self.selector_array:
-            self.interface[selector_name, 'io', 'type'] = ['out', 'gpot']
-
-        self.interface[selector_out_string, 'io', 'type'] = ['in', 'gpot']
+    def _read_realtime_input(self):
+        '''
+        Passes cahced info to gpu
+        '''
+        print self._cached_data
 
     def get_data(self):
-        if self.filename:
+        if self.input_file:
             self._cached_data = self.__class__._input_data
             if self.index < len(self.__class__._input_data) - 1:
                 self.index = self.index + 1
         else:
             self._cached_data = self.__class__._input_data[len(self.__class__._input_data) - 1]
 
-    def send_data(self):
-        out_gpot_ports = self.interface.out_ports().gpot_ports().to_tuples()
-
-        self.pm['gpot'][out_gpot_ports] = \
-                    self._cached_data
-
     def pre_run(self):
-        #set up socket handling
+        super(io_interface, self).pre_run()
         threading.Thread(target=self.input_server).start()
      
     def run_step(self):
-        super(io_interface, self).run_step()
         self.get_data()
-        self.send_data()
+        self.process_data()
+        super(io_interface, self).run_step()
 
-
-        temp = " ".join(map(str,self.__class__._input_data))
-        self.log_info("Thread 2: %s" % temp)
-     
+    def process_data(self):
+        '''
+        Used to process the data before it is sent to neurons. Manipulate self._cached_data.
+        '''
+        print 'stuff'
+         
     @property
     def cached_data(self):
         return self._cached_data
