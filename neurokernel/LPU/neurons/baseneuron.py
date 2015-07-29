@@ -6,7 +6,6 @@ Base neuron class used by LPU.
 
 from abc import ABCMeta, abstractmethod, abstractproperty
 import os.path
-import neurokernel.LPU.neurons as neurons
 import numpy as np
 
 import pycuda.gpuarray as garray
@@ -105,8 +104,7 @@ class BaseNeuron(object):
             self.__I_file = tables.openFile(self.__LPU_id + "_I_" +  self.__class__.__name__ +  str(i) + ".h5", mode="w")
             self.__I_file.createEArray("/","array", \
                                      tables.Float64Atom(), (0,self.num_neurons))
-        self.cu_path = os.path.dirname(neurons.__file__)
-
+            
     @abstractmethod
     def eval(self):
         '''
@@ -164,6 +162,7 @@ class BaseNeuron(object):
                 self.__V_rev.gpudata)
         if self.debug:
             self.__I_file.root.array.append(self.I.get().reshape((1, -1)))
+
 
     def post_run(self):
         '''
@@ -274,8 +273,8 @@ class BaseNeuron(object):
         mod = SourceModule(template % {"num_neurons": self.__num_neurons}, 
                            options = ["--ptxas-options=-v"])
         func = mod.get_function("get_input")
-        func.prepare([np.intp, np.intp, np.intp, np.intp, 
-                      np.intp, np.intp, np.intp])
+        func.prepare('PPPPPPP')#[np.intp, np.intp, np.intp, np.intp, 
+        #              np.intp, np.intp, np.intp])
         self.__block_get_input = (32, 32, 1)
         self.__grid_get_input = ((self.__num_neurons - 1) / 32 + 1, 1)
         return func
@@ -370,5 +369,5 @@ class BaseNeuron(object):
         mod = SourceModule(template % {"num_neurons": self.__num_neurons}, 
                            options = ["--ptxas-options=-v"])
         func = mod.get_function("get_input")
-        func.prepare([np.intp, np.intp, np.intp, np.intp, np.intp])
+        func.prepare('PPPPP')#[np.intp, np.intp, np.intp, np.intp, np.intp])
         return func

@@ -68,9 +68,10 @@ class MorrisLecar_RK4(BaseNeuron):
         func = mod.get_function("morris_lecar_rk4")
 
 
-        func.prepare([np.intp, np.intp, np.int32, np.intp, scalartype,
-                      np.intp, np.intp, np.intp, np.intp,
-                      np.intp, np.intp, np.intp, np.intp, np.intp,
-                      np.intp, np.intp, np.intp])
+        func.prepare('PPiP'+np.dtype(dtype).char+'PPPPPPPPPPPP')
+        #             [np.intp, np.intp, np.int32, np.intp, scalartype,
+        #              np.intp, np.intp, np.intp, np.intp,
+        #              np.intp, np.intp, np.intp, np.intp, np.intp,
+        #              np.intp, np.intp, np.intp])
 
         return func
