@@ -715,10 +715,6 @@ class LPU(Module):
                     self.file_pointer,
                     self.file_pointer + self._one_time_import)
             if h_ext.shape[0] == self.I_ext.shape[0]:
-                print h_ext
-                print h_ext.shape[0]
-                print self.I_ext.shape[0]
-                print self._one_time_import
                 self.I_ext.set(h_ext)
                 self.file_pointer += self._one_time_import
                 self.frame_count = 0

@@ -16,27 +16,16 @@ def create_lpu_0(neu_num):
     G = nx.DiGraph()
 
     #sets up node connections in graph
-    G.add_nodes_from(range(neu_num*2))
+    G.add_nodes_from(range(neu_num))
 
 
-    for i in xrange(0, neu_num*2, 2):
-
-        G.node[i] = {
-                'name': 'port_in_gpot_' + str(i),
-                'model': 'port_in_gpot',
-                'selector': '/lpu_1/in/gpot/' + str(i), 
-                'spiking': False,
-                'public': True,
-                'extern': False
-                }
-
-        j = i+1
+    for i in xrange(0, neu_num):
 
         #MorrisLecar updated
-        G.node[j] = {
+        G.node[i] = {
             'model': 'MorrisLecar_a',
             'name': 'neuron_' + str(i),
-            'extern': False, 
+            'extern': True, 
             'public': True, 
             'spiking': False, 
             'selector':'/lpu_1/out/gpot/' + str(i), 
@@ -56,19 +45,6 @@ def create_lpu_0(neu_num):
             'initn': 0.03
         }
 
-            
-        #From input port to output
-        G.add_edge(i, j, type='directed', attr_dict={
-            'name': G.node[i]['name']+'-'+G.node[j]['name'],
-            'model'       : 'power_gpot_gpot_sig',
-            'class'       : 3,
-            'slope'       : 0.8,
-            'threshold'   : -45,
-            'power'       : 10.0,
-            'saturation'  : 30.0,
-            'delay'       : 1.0,
-            'reverse'     : 0,
-            'conductance' : True})
     print 'writing'
     nx.write_gexf(G, 'simple_lpu_1.gexf.gz')
     print 'done'

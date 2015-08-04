@@ -42,16 +42,13 @@ port_time = get_random_port()
 num_ports = 100
 (n_dict, s_dict) = LPU.lpu_parser('./data/simple_lpu_1.gexf.gz')
 
-lpu_1 = io_interface(dt, n_dict, s_dict, input_file=None, output_file='simple_output_1.h5', port_ctrl=port_ctrl, port_data=port_data, port_time=port_time, device=1, id='lpu_1', debug=False, num_ports=num_ports)
+lpu_1 = io_interface(dt, n_dict, s_dict, input_file=None, output_file='simple_output_1.h5', port_ctrl=port_ctrl, port_data=port_data, port_time=port_time, device=0, id='lpu_1', debug=False, num_ports=num_ports)
 
 man = Manager(port_data, port_ctrl, port_time)
 
 man.add_brok()
 
-man.add_mod(interface)
 man.add_mod(lpu_1)
-
-man.connect(interface, lpu_1, pat, 0, 1)
 
 man.start(steps=Nt)
 
