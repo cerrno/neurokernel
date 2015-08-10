@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
 """
-Real time sensor interface. Initializes N number of ports for use by a data field that maps to an array. 
+@author: Amol Kapoor
+@version: 0.1
+@date: 8-1-15
 
-Needs to be tested with multiple ports (640 * 480), and with async time with sockets
+Real time interface for use with LPUs
 """
 
 import warnings
@@ -30,6 +32,7 @@ import threading
 import socket
 import time
 import random
+import json
 
 from Queue import Queue
 
@@ -41,30 +44,43 @@ class io_interface(LPU):
         host = '' 
         port = 50000 
         backlog = 5 
-        size = 1024 
+        size = 4096
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
         s.bind((host,port)) 
         s.listen(backlog) 
-               
+
+        client, address = s.accept() 
+
+        data_str = ""
+        data_buffer = ""
+
         while 1: 
-            '''
-            actual code, commented for testing:
-            actual_data = json.loads(data)
-            a = np.array(actual_data)
-            '''
-            client, address = s.accept() 
-            data = client.recv(size) 
+            self.log_info("Thread 0: starting")
+
+            if len(data_buffer):
+                data_str = data_buffer
+
+            while 1:
+                data_str = data_str + client.recv(size)
+                if '_' in data_str:
+                    break
+
+            data_info = data_str.split('_')
+
+            data = data_info[0]
+
+            data_buffer = data_info[1]
+
+            self.log_info("Thread 2: %d" % len(data))
+
             if data: 
-                actual_data = float(data)
-                a = np.zeros(self.num_ports, np.float64)
-                a.fill(actual_data)
+                actual_data = json.loads(data)
+
+                a = np.array(actual_data)
+
                 self.__class__._input_data.append(a)
 
-                self.log_info("Updated: %d" % actual_data)
-            client.close()
-
-            temp = " ".join(map(str,self.__class__._input_data))
-            self.log_info("Thread 1: %s" % temp)
+                self.log_info("Thread 3: loaded")
 
     def __init__(self, dt, n_dict, s_dict, input_file, output_file, port_ctrl, port_data, port_time, device, id, debug, num_ports):
 
@@ -82,27 +98,9 @@ class io_interface(LPU):
         super(io_interface, self).__init__(dt, n_dict, s_dict, input_file, output_file, device, port_ctrl, port_data, port_time, id, debug)
 
     def _read_realtime_input(self):
-        '''
-        Passes cahced info to gpu
-        '''
+        
         print "||"
-        print len(self.synapse_state)
         print self.synapse_state
-        print self.synapse_state.dtype
-        print "|"
-        print self.total_synapses
-        print "|"
-        print self._cached_data
-        print self._cached_data.shape
-        print self._cached_data.dtype
-        print "||"
-
-        '''
-        cuda.memcpy_htod(
-            int(int(self.synapse_state.gpudata) +
-            len(self.synapse_state)*self.synapse_state.dtype.itemsize),
-            self._cached_data)
-        '''
 
         self.synapse_state.set(self._cached_data)
 
@@ -113,10 +111,7 @@ class io_interface(LPU):
         Default randomly chooses total_synapse num of neurons from class attribute _input_data
         '''
 
-        self._cached_data = np.zeros(len(self.synapse_state), np.float64)
-
-        for i in xrange(0, len(self.synapse_state)):
-            self._cached_data[i] = random.choice(self.__class__._input_data[len(self.__class__._input_data) - 1])
+        self._cached_data = np.array(self.__class__._input_data[len(self.__class__._input_data) - 1][:len(self.synapse_state)])
 
     def get_data(self):
         if self.input_file:
@@ -132,7 +127,6 @@ class io_interface(LPU):
      
     def run_step(self):
         self.get_data()
-        self.process_data()
         super(io_interface, self).run_step()
          
     @property
