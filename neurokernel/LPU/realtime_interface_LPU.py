@@ -32,7 +32,11 @@ import threading
 import socket
 import time
 import random
-import json
+
+try:
+    import ujson as json
+except ImportError:
+    import json
 
 from Queue import Queue
 
@@ -57,6 +61,8 @@ class io_interface(LPU):
         data_buffer = ""
 
         while 1: 
+            start_time = current_milli_time()
+
             data_str = ""
             data_list = []
 
@@ -64,23 +70,15 @@ class io_interface(LPU):
                 data_list.append(data_buffer)
                 data_buffer = ""
 
-            start_time = current_milli_time()
-
             data_list.append(client.recv(16384))
             while '_' not in data_list[-1]:
                 data_list.append(client.recv(16384))
 
             data_str = "".join(data_list)
 
-            self.log_info("Thread 0: %d" % (current_milli_time() - start_time))
-            start_time = current_milli_time()
-
             data_info = data_str.split('_')
 
             data_buffer = data_info[1]
-
-            self.log_info("Thread 1: %d" % (current_milli_time() - start_time))
-            start_time = current_milli_time()
 
             self._input_data = np.array(json.loads(data_info[0]))
 

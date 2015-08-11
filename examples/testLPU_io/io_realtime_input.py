@@ -10,17 +10,16 @@ Connects to a socket and sends realtime input from arrays of 100 randomly genera
 import socket
 import time
 import random
-import json
+
+try:
+    import ujson as json
+except ImportError:
+    print "ERROR"
+    import json
 
 ARRAYSIZE = 640*480;
 
-def generateData(data_size):
-    data = []
-
-    for i in xrange(0, data_size):
-        data.append(random.random()*100 - 50)
-
-    return data
+current_milli_time = lambda: int(round(time.time() * 1000))
 
 def main(data_size):
     #How often to send data (slightly over 30 frames per second)
@@ -34,20 +33,24 @@ def main(data_size):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     s.connect((host,port)) 
 
-    while 1: 
-        start_time = time.time()
+    count = 0
 
-        data = generateData(data_size);
+    while 1: 
+        start_time = current_milli_time()
+
+        data = [random.random()*100 - 50 for _ in xrange(data_size)]
+
+        start_time = current_milli_time()
 
         data_str = json.dumps(data)
-
-        print len(data_str)
 
         data_str = data_str + "_"
 
         s.send(data_str) 
 
-        time.sleep(cycle_time)
+        print current_milli_time() - start_time
+
+        time.sleep(max(0, cycle_time - start_time))
 
 if __name__ == "__main__":
     main(ARRAYSIZE)
