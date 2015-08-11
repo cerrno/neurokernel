@@ -12,7 +12,7 @@ import time
 import random
 import json
 
-ARRAYSIZE = 200*200;
+ARRAYSIZE = 640*480;
 
 def generateData(data_size):
     data = []
@@ -24,7 +24,7 @@ def generateData(data_size):
 
 def main(data_size):
     #How often to send data (slightly over 30 frames per second)
-    cycle_time = .03334
+    cycle_time = .034
 
 
     #socket connection details

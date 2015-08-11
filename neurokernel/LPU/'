@@ -36,8 +36,6 @@ import json
 
 from Queue import Queue
 
-current_milli_time = lambda: int(round(time.time() * 1000))
-
 class io_interface(LPU):
 
     #_input_data = []
@@ -46,6 +44,7 @@ class io_interface(LPU):
         host = '' 
         port = 50000 
         backlog = 5 
+        size = 4096
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
         s.bind((host,port)) 
         s.listen(backlog) 
@@ -53,38 +52,32 @@ class io_interface(LPU):
         client, address = s.accept() 
 
         data_str = ""
-        data_list = []
         data_buffer = ""
 
         while 1: 
-            data_str = ""
-            data_list = []
-
             if len(data_buffer):
-                data_list.append(data_buffer)
+                data_str = data_buffer
                 data_buffer = ""
 
-            start_time = current_milli_time()
+            start_time = time.time()
 
-            data_list.append(client.recv(16384))
-            while '_' not in data_list[-1]:
-                data_list.append(client.recv(16384))
+            while '_' not in data_str:
+                data_str = data_str + client.recv(size)
 
-            data_str = "".join(data_list)
-
-            self.log_info("Thread 0: %d" % (current_milli_time() - start_time))
-            start_time = current_milli_time()
+            self.log_info("Thread 0: %d" % (time.time() - start_time))
+            start_time = time.time()
 
             data_info = data_str.split('_')
 
+            data_str = ""
+
             data_buffer = data_info[1]
 
-            self.log_info("Thread 1: %d" % (current_milli_time() - start_time))
-            start_time = current_milli_time()
+            self.log_info("Thread 1: %d" % (time.time() - start_time))
 
-            self._input_data = np.array(json.loads(data_info[0]))
+            self._input_data[0] = np.array(json.loads(data_info[0])
 
-            self.log_info("Thread 2: %d" % (current_milli_time() - start_time))
+            self.log_info("Thread 1: %d" % (time.time() - start_time))
 
     def __init__(self, dt, n_dict, s_dict, input_file, output_file, port_ctrl, port_data, port_time, device, id, debug, num_ports):
 
@@ -92,7 +85,9 @@ class io_interface(LPU):
         self._cached_data = np.zeros(num_ports)
         
         if not input_file:
-            self._input_data = np.zeros(num_ports, np.float64)
+            self._input_data = []
+            init = np.zeros(num_ports, np.float64)
+            self._input_data.append(init)
         else:
             #Baked
             self.input_file = input_file
@@ -113,7 +108,7 @@ class io_interface(LPU):
         Default randomly chooses total_synapse num of neurons from class attribute _input_data
         '''
 
-        self._cached_data = np.array(self._input_data[:len(self.synapse_state)])
+        self._cached_data = np.array(self._input_data[len(self._input_data) - 1][:len(self.synapse_state)])
 
     def get_data(self):
         if self.input_file:
