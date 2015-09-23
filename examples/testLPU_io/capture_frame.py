@@ -6,26 +6,46 @@
 
 import cv2
 
+import socket
+import time
+import random
+
+try:
+    import ujson as json
+except ImportError:
+    print "ERROR"
+    import json
+
 camera_port = 0
-throw_frames = 30
 
 camera = cv2.VideoCapture(camera_port)
+
+ARRAYSIZE = 640*480;
 
 def get_image():
     retval, im = camera.read()
     return im
 
-print("adjusting to light")
-for i in xrange(throw_frames):
-    temp = get_image()
+def main(data_size)
+    #socket connection details
+    host = 'localhost' 
+    port = 50000 
+    size = 4096
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+    s.connect((host,port)) 
 
-print("saving image")
-camera_capture = get_image()
-file = "./test_image.png"
-cv2.imwrite(file, camera_capture)
+    cycle_time = .034
 
-# we now have an image object returned from get_image that
-# can be passed along to neurokernel
-print(type(camera_capture))
+    while 1: 
+        start_time = current_milli_time()
 
-del(camera)
+        gray_image = cv2.cvtColor(get_image(), cv2.COLOR_BGR2GRAY))
+            
+        data = json.dumps(gray_image) + "_"
+
+        s.send(data_array[count]) 
+
+        time.sleep(max(0, cycle_time - start_time))
+
+if __name__ == "__main__":
+    main(ARRAYSIZE)

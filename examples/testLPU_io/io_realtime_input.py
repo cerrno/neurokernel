@@ -39,19 +39,17 @@ def main(data_size):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     s.connect((host,port)) 
 
-    count = 0
+    print s
 
     while 1: 
         start_time = current_milli_time()
 
-        print (len(data_array[count])*2)
+        #print (len(data_array[count])*2)
         s.send(data_array[count]) 
 
-        print current_milli_time() - start_time
+        #print current_milli_time() - start_time
 
         time.sleep(max(0, cycle_time - start_time))
-
-        count = count+1
 
 if __name__ == "__main__":
     main(ARRAYSIZE)

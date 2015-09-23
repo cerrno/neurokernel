@@ -47,20 +47,34 @@ class io_interface(LPU):
     #_input_data = []
 
     def input_server(self):
+        self.log_info("Thread started") 
         host = '' 
         port = 50000 
         backlog = 5 
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-        s.bind((host,port)) 
-        s.listen(backlog) 
 
+        self.log_info("Thread started _ 0")
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+        self.log_info("Thread started _ 1 socket")
+    
+        s.bind((host,port))
+
+        self.log_info("Thread bound")
+
+        s.listen(backlog)
+
+        self.log_info("Thread waiting")
         client, address = s.accept() 
+
+        self.log_info("Client accepted")
 
         data_str = ""
         data_list = []
         data_buffer = ""
 
+        self.log_info("Entering loop")
+
         while 1: 
+            self.log_info("Start of loop")
             start_time = current_milli_time()
 
             data_str = ""
@@ -70,9 +84,17 @@ class io_interface(LPU):
                 data_list.append(data_buffer)
                 data_buffer = ""
 
+            self.log_info("Thread 2_1")
+
             data_list.append(client.recv(16384))
+
+            self.log_info("Thread 2_0")
+
             while '_' not in data_list[-1]:
+                self.log_info("Thread 2_1")
                 data_list.append(client.recv(16384))
+
+            self.log_info("Thread 2_2")
 
             data_str = "".join(data_list)
 
@@ -128,6 +150,7 @@ class io_interface(LPU):
     def run_step(self):
 
         if self.first_step:
+            self.log_info("HELLO");
             threading.Thread(target=self.input_server).start()
 
         self.get_data()
