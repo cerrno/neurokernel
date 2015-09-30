@@ -41,6 +41,8 @@ def main(data_size):
 
     print s
 
+    count = 0;
+
     while 1: 
         start_time = current_milli_time()
 
@@ -50,6 +52,9 @@ def main(data_size):
         #print current_milli_time() - start_time
 
         time.sleep(max(0, cycle_time - start_time))
+	
+	count = count + 1;
+	
 
 if __name__ == "__main__":
     main(ARRAYSIZE)

@@ -47,34 +47,23 @@ class io_interface(LPU):
     #_input_data = []
 
     def input_server(self):
-        self.log_info("Thread started") 
         host = '' 
         port = 50000 
         backlog = 5 
 
-        self.log_info("Thread started _ 0")
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-        self.log_info("Thread started _ 1 socket")
-    
         s.bind((host,port))
-
-        self.log_info("Thread bound")
-
         s.listen(backlog)
-
-        self.log_info("Thread waiting")
         client, address = s.accept() 
-
-        self.log_info("Client accepted")
 
         data_str = ""
         data_list = []
         data_buffer = ""
 
-        self.log_info("Entering loop")
+        
+        self.log_info("Thread 2: Entering while loop")
 
         while 1: 
-            self.log_info("Start of loop")
             start_time = current_milli_time()
 
             data_str = ""
@@ -84,25 +73,35 @@ class io_interface(LPU):
                 data_list.append(data_buffer)
                 data_buffer = ""
 
-            self.log_info("Thread 2_1")
-
             data_list.append(client.recv(16384))
 
-            self.log_info("Thread 2_0")
+
+            self.log_info("Thread 2: Appending data list")
 
             while '_' not in data_list[-1]:
-                self.log_info("Thread 2_1")
+                self.log_info("Thread 2: Appending data list (2)")
                 data_list.append(client.recv(16384))
 
-            self.log_info("Thread 2_2")
+            self.log_info("Thread 2: Out of loop")
 
             data_str = "".join(data_list)
 
             data_info = data_str.split('_')
 
-            data_buffer = data_info[1]
+            self.log_info("Thread 2: Unpacking data")
+            
+            self.log_info("Thread 2: %s" % data_info[0])
 
-            self._input_data = np.array(json.loads(data_info[0]))
+            if(len(data_info) > 1):
+                data_buffer = data_info[1]
+
+            self.log_info("Thread 2: %s" % data_info[0])
+
+            image = np.fromstring(data_info[0], dtype=np.float64)
+            
+            #image = np.unpackbits(image)
+
+            self._input_data = image 
 
             self.log_info("Thread 2: %d" % (current_milli_time() - start_time))
 

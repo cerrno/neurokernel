@@ -9,6 +9,7 @@ import cv2
 import socket
 import time
 import random
+import numpy as np
 
 try:
     import ujson as json
@@ -22,11 +23,13 @@ camera = cv2.VideoCapture(camera_port)
 
 ARRAYSIZE = 640*480;
 
+current_milli_time = lambda: int(round(time.time() * 1000))
+
 def get_image():
     retval, im = camera.read()
     return im
 
-def main(data_size)
+def main(data_size):
     #socket connection details
     host = 'localhost' 
     port = 50000 
@@ -36,16 +39,26 @@ def main(data_size)
 
     cycle_time = .034
 
+    count = 0
+
     while 1: 
+        print count
         start_time = current_milli_time()
 
-        gray_image = cv2.cvtColor(get_image(), cv2.COLOR_BGR2GRAY))
-            
-        data = json.dumps(gray_image) + "_"
+        gray_image = cv2.cvtColor(get_image(), cv2.COLOR_BGR2GRAY)
 
-        s.send(data_array[count]) 
+        gray_image = np.reshape(gray_image, (-1, 1))
+        #gray_image = np.packbits(gray_image)
+        data = gray_image.tostring() + "_"
+        #data = json.dumps(gray_image.tolist()) + "_"
+        s.send(data) 
 
         time.sleep(max(0, cycle_time - start_time))
 
+        count = count + 1
+
 if __name__ == "__main__":
+    data = get_image();
+    cv2.imwrite('temp.png', data);
+    gray_image = cv2.cvtColor(get_image(), cv2.COLOR_BGR2GRAY)
     main(ARRAYSIZE)
