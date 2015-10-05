@@ -32,7 +32,7 @@ def get_image():
 def main(data_size):
     #socket connection details
     host = 'localhost' 
-    port = 50000 
+    port = 60000
     size = 4096
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     s.connect((host,port)) 
@@ -49,7 +49,12 @@ def main(data_size):
 
         gray_image = np.reshape(gray_image, (-1, 1))
         #gray_image = np.packbits(gray_image)
-        data = gray_image.tostring() + "_"
+        data = gray_image.tostring()
+
+        print len(data)
+
+        data = str(len(data))+ "_" + data
+
         #data = json.dumps(gray_image.tolist()) + "_"
         s.send(data) 
 
@@ -61,4 +66,7 @@ if __name__ == "__main__":
     data = get_image();
     cv2.imwrite('temp.png', data);
     gray_image = cv2.cvtColor(get_image(), cv2.COLOR_BGR2GRAY)
+
+    print gray_image.dtype
+
     main(ARRAYSIZE)

@@ -30,7 +30,7 @@ import sys
 logger = base.setup_logger(file_name='neurokernel.log', screen=False)
 
 dt = 1e-4
-dur = 1.0
+dur = .1
 Nt = int(dur/dt)
 
 port_data = get_random_port()

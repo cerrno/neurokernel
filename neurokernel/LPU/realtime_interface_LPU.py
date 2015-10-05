@@ -33,6 +33,8 @@ import socket
 import time
 import random
 
+import os
+
 try:
     import ujson as json
 except ImportError:
@@ -48,7 +50,7 @@ class io_interface(LPU):
 
     def input_server(self):
         host = '' 
-        port = 50000 
+        port = 60000
         backlog = 5 
 
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
@@ -67,38 +69,42 @@ class io_interface(LPU):
             start_time = current_milli_time()
 
             data_str = ""
-            data_list = []
 
             if len(data_buffer):
-                data_list.append(data_buffer)
+                data_str = data_buffer
                 data_buffer = ""
 
-            data_list.append(client.recv(16384))
+            sent_data = client.recv(16384) 
 
+            data_str = data_str + sent_data
+
+            delim_sent_data = data_str.split('_', 1)
+
+            data_size = int(delim_sent_data[0])
+
+            data_str = delim_sent_data[1]
 
             self.log_info("Thread 2: Appending data list")
 
-            while '_' not in data_list[-1]:
+            while len(data_str) < data_size:
                 self.log_info("Thread 2: Appending data list (2)")
-                data_list.append(client.recv(16384))
+                self.log_info("Thread 2: %d" % len(data_str))
+                self.log_info("Thread 2: %d" % data_size)
+                data_str = data_str + client.recv(16384)
 
             self.log_info("Thread 2: Out of loop")
 
-            data_str = "".join(data_list)
+            data_buffer = data_str[data_size:]
 
-            data_info = data_str.split('_')
+            self.log_info("Thread 2: Loaded buffer")
 
-            self.log_info("Thread 2: Unpacking data")
-            
-            self.log_info("Thread 2: %s" % data_info[0])
+            image_data = data_str[0:data_size]
 
-            if(len(data_info) > 1):
-                data_buffer = data_info[1]
+            self.log_info("Thread 2: Loaded image data")
 
-            self.log_info("Thread 2: %s" % data_info[0])
+            image = np.fromstring(image_data, dtype=np.uint8)
 
-            image = np.fromstring(data_info[0], dtype=np.float64)
-            
+            image = image.astype(np.double)
             #image = np.unpackbits(image)
 
             self._input_data = image 
@@ -111,7 +117,7 @@ class io_interface(LPU):
         self._cached_data = np.zeros(num_ports)
         
         if not input_file:
-            self._input_data = np.zeros(num_ports, np.float64)
+            self._input_data = np.zeros(640*480, np.double)
         else:
             #Baked
             self.input_file = input_file
@@ -132,6 +138,13 @@ class io_interface(LPU):
         Default randomly chooses total_synapse num of neurons from class attribute _input_data
         '''
 
+        image = np.reshape(self._input_data, [1, 480, 640])
+
+        if not os.path.isfile('imagedata'):
+            si.write_array(image, 'imagedata', mode = 'w')
+        else:
+            si.write_array(image, 'imagedata', mode = 'a')
+       
         self._cached_data = np.array(self._input_data[:len(self.synapse_state)])
 
     def get_data(self):
