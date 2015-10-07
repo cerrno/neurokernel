@@ -92,5 +92,4 @@ class HodgkinHuxley_RK4(BaseNeuron):
         #              np.intp, np.intp, np.intp,
         #              np.intp])
 
-
         return func

@@ -8,7 +8,6 @@ import copy
 import itertools
 import re
 
-import msgpack
 import numpy as np
 import pandas as pd
 import ply.lex as lex
@@ -31,8 +30,16 @@ def _decode(obj):
     except:
         return obj
 
-_packb = lambda x: msgpack.packb(x, default=_encode)
-_unpackb = lambda x: msgpack.unpackb(x, object_hook=_decode)
+# Fall back to using pickle for hashing if msgpack isn't available:
+try:
+    import msgpack
+except ImportError:
+    import cPickle as pickle
+    _packb = pickle.dumps
+    _unpackb = pickle.loads
+else:
+    _packb = lambda x: msgpack.packb(x, default=_encode)
+    _unpackb = lambda x: msgpack.unpackb(x, object_hook=_decode)
 
 class Selector(object):
     """
@@ -92,6 +99,14 @@ class Selector(object):
         """
 
         return self._expanded
+
+    @property
+    def identifiers(self):
+        """
+        List of individual identifiers in selector.
+        """
+        
+        return [SelectorMethods.collapse((i,)) for i in self._expanded]
 
     @property
     def max_levels(self):
@@ -2037,8 +2052,7 @@ class BasePortMapper(object):
             Integer indices of ports comprised by selector. 
         """
 
-        return self.sel.select(self.portmap,
-                    selector).dropna().astype(np.int64).values
+        return self.sel.select(self.portmap, selector).dropna().values
 
     def get_map(self, selector):
         """

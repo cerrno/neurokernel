@@ -12,7 +12,8 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
-from plsel import Selector, BasePortMapper, SelectorMethods
+from plsel import Selector, SelectorMethods
+from pm import BasePortMapper
 
 class Interface(object):
     """
@@ -177,7 +178,7 @@ class Interface(object):
             s = [i for i in itertools.chain(*selector.expanded)]
         else:
             s = self.sel.pad_selector(selector.expanded,
-                                      len(self.index.levshape))
+                                      len(self.index.shape))
         for k, v in data.iteritems():
             self.data[k].ix[s] = v
         
@@ -274,12 +275,13 @@ class Interface(object):
 
         Examples
         --------
-        >>> import plsel
+        >>> import plsel, pattern
         >>> import pandas
         >>> idx = plsel.SelectorMethods.make_index('/foo[0:2]')
         >>> data = [[0, 'in', 'spike'], [1, 'out', 'gpot']]
         >>> columns = ['interface', 'io', 'type']
         >>> df = pandas.DataFrame(data, index=idx, columns=columns)
+        >>> i = pattern.Interface.from_df(df)
 
         Parameters
         ----------
@@ -314,6 +316,27 @@ class Interface(object):
         i.data = df.copy()
         i.__validate_index__(i.index)
         return i
+
+    @classmethod
+    def from_csv(cls, file_name, **kwargs):
+        """
+        Create an Interface from a properly formatted CSV file.
+
+        Parameters
+        ----------
+        file_name : str
+            File name of CSV file containing interface data.
+        kwargs : dict
+            Options to pass to `DataFrame.from_csv()`
+
+        Returns
+        -------
+        i : Interface
+            Generated Interface instance.
+        """
+
+        df = pd.DataFrame.from_csv(file_name, **kwargs)
+        return cls.from_df(df)
 
     @classmethod
     def from_dict(cls, d):
@@ -1136,7 +1159,7 @@ class Pattern(object):
         sel0, sel1, ...: str
             Selectors defining the sets of ports potentially connected by the 
             pattern. These selectors must be disjoint, i.e., no identifier comprised
-            by one selector may be in any other selector.   
+            by one selector may be in any other selector, and non-empty.
         from_sel, to_sel : str
             Selectors that describe the pattern's initial index. If specified, 
             both selectors must be set. If no selectors are set, the index is
@@ -1148,6 +1171,8 @@ class Pattern(object):
         comp_op : str
             Operator to use to combine selectors into single selector that
             comprises both the source and destination ports in a pattern.
+        validate : bool
+            If True, validate the index of the Pattern's DataFrame.
 
         Returns
         -------
@@ -1160,8 +1185,12 @@ class Pattern(object):
         data = kwargs['data'] if kwargs.has_key('data') else None
         columns = kwargs['columns'] if kwargs.has_key('columns') else ['conn']
         comb_op = kwargs['comb_op'] if kwargs.has_key('comb_op') else '+'
+        validate = kwargs['validate'] if kwargs.has_key('validate') else True
 
         # Create empty pattern:
+        for s in selectors:
+            if not len(s):
+                raise ValueError('cannot create pattern with empty selector %s' % s)
         p = cls(*selectors, columns=columns)
 
         # Construct index from concatenated selectors if specified:
@@ -1179,7 +1208,8 @@ class Pattern(object):
                 raise ValueError('incompatible selectors specified')
         else:
             idx = p.sel.make_index('(%s)%s(%s)' % (from_sel, comb_op, to_sel), names)
-        p.__validate_index__(idx)
+        if validate:
+            p.__validate_index__(idx)
 
         # Replace the pattern's DataFrame:
         p.data = pd.DataFrame(data=data, index=idx, columns=columns)
@@ -1279,6 +1309,8 @@ class Pattern(object):
             Data to load store in class instance.
         columns : sequence of str
             Data column names.
+        validate : bool
+            If True, validate the index of the Pattern's DataFrame.
 
         Returns
         -------
@@ -1290,8 +1322,9 @@ class Pattern(object):
         to_sel = kwargs['to_sel'] if kwargs.has_key('to_sel') else None
         data = kwargs['data'] if kwargs.has_key('data') else None
         columns = kwargs['columns'] if kwargs.has_key('columns') else ['conn']
+        validate = kwargs['validate'] if kwargs.has_key('validate') else True
         return cls._create_from(*selectors, from_sel=from_sel, to_sel=to_sel, 
-                                data=data, columns=columns, comb_op='+')
+                                data=data, columns=columns, comb_op='+', validate=validate)
 
     def gpot_ports(self, i=None, tuples=False):
         return self.interface.gpot_ports(i, tuples)
@@ -1384,6 +1417,8 @@ class Pattern(object):
             initially empty.
         columns : sequence of str
             Data column names.
+        validate : bool
+            If True, validate the index of the Pattern's DataFrame.
 
         Returns
         -------
@@ -1395,8 +1430,9 @@ class Pattern(object):
         to_sel = kwargs['to_sel'] if kwargs.has_key('to_sel') else None
         data = kwargs['data'] if kwargs.has_key('data') else None
         columns = kwargs['columns'] if kwargs.has_key('columns') else ['conn']
+        validate = kwargs['validate'] if kwargs.has_key('validate') else True
         return cls._create_from(*selectors, from_sel=from_sel, to_sel=to_sel, 
-                                data=data, columns=columns, comb_op='.+')
+                                data=data, columns=columns, comb_op='.+', validate=validate)
 
     def __validate_index__(self, idx):
         """

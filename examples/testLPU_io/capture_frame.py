@@ -49,12 +49,7 @@ def main(data_size):
 
         gray_image = np.reshape(gray_image, (-1, 1))
         #gray_image = np.packbits(gray_image)
-        data = gray_image.tostring()
-
-        print len(data)
-
-        data = str(len(data))+ "_" + data
-
+        data = gray_image.tostring() + "_"
         #data = json.dumps(gray_image.tolist()) + "_"
         s.send(data) 
 
@@ -66,7 +61,4 @@ if __name__ == "__main__":
     data = get_image();
     cv2.imwrite('temp.png', data);
     gray_image = cv2.cvtColor(get_image(), cv2.COLOR_BGR2GRAY)
-
-    print gray_image.dtype
-
     main(ARRAYSIZE)

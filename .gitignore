@@ -17,23 +17,7 @@ neurokernel.egg-info
 neurokernel/neurokernel.log
 !neurokernel/examples/retina_lamina/image1.mat
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 .idea/
 *.swp
 build/
 dist/
-=======
-.idea/
->>>>>>> Fix multidimensional RK4 for Morris-Lecar
-=======
-.idea/
-*.swp
->>>>>>> Update parameters for Morris-Lecar testing
-=======
-.idea/
-*.swp
-build/
-dist/
->>>>>>> 9e20d472f5727b3f025129bf78859c0b1a14a177

@@ -43,7 +43,6 @@ class HodgkinHuxley_RK4(BaseNeuron):
 
         self.V = V
 
-        self.n = garray.to_gpu(np.asarray(n_dict['initn'], dtype=np.float64))
         self.m = garray.to_gpu(np.asarray(n_dict['initm'], dtype=np.float64))
         self.h = garray.to_gpu(np.asarray(n_dict['inith'], dtype=np.float64))
 

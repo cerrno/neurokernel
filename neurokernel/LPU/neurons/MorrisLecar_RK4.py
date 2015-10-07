@@ -67,7 +67,6 @@ class MorrisLecar_RK4(BaseNeuron):
                            options=["--ptxas-options=-v"])
         func = mod.get_function("morris_lecar_rk4")
 
-
         func.prepare('PPiP'+np.dtype(dtype).char+'PPPPPPPPPPPP')
         #             [np.intp, np.intp, np.int32, np.intp, scalartype,
         #              np.intp, np.intp, np.intp, np.intp,

@@ -5,9 +5,7 @@
 from neurokernel.core import Manager
 from neurokernel.LPU.LPU import LPU
 from neurokernel.tools.comm import get_random_port
-import neurokernel.base as base
-
-dt = 1e-4
+dt = 2e-5
 dur = 1.0
 Nt = int(dur/dt)
 

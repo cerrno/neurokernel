@@ -38,13 +38,7 @@ V.add_plot({'type': 'waveform', 'ids': {0:[1]}},
 
 V.add_plot({'type': 'waveform', 'ids': {0:[2]}},
             'Simple LPU (Graded Potential)', 'Output')
-<<<<<<< HEAD
-=======
 
-
-
-
->>>>>>> 9e20d472f5727b3f025129bf78859c0b1a14a177
 #vars for plots
 
 #how often it updates
@@ -59,14 +53,6 @@ V.fontsize = 10
 #V.out_filename = 'simple_output.avi'
 #V.codec = 'libtheora'
 
-<<<<<<< HEAD
-#self explantory
-V.fontsize = 10
-V.out_filename = 'simple_output.avi'
-V.codec = 'libtheora'
-
-=======
->>>>>>> 9e20d472f5727b3f025129bf78859c0b1a14a177
 #time step
 V.dt = 0.0001
 
