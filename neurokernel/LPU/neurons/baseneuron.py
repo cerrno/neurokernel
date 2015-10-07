@@ -274,8 +274,8 @@ class BaseNeuron(object):
         mod = SourceModule(template % {"num_neurons": self.__num_neurons}, 
                            options = ["--ptxas-options=-v"])
         func = mod.get_function("get_input")
-        func.prepare([np.intp, np.intp, np.intp, np.intp, 
-                      np.intp, np.intp, np.intp])
+        func.prepare('PPPPPPP')#[np.intp, np.intp, np.intp, np.intp, 
+        #              np.intp, np.intp, np.intp])
         self.__block_get_input = (32, 32, 1)
         self.__grid_get_input = ((self.__num_neurons - 1) / 32 + 1, 1)
         return func
@@ -370,5 +370,5 @@ class BaseNeuron(object):
         mod = SourceModule(template % {"num_neurons": self.__num_neurons}, 
                            options = ["--ptxas-options=-v"])
         func = mod.get_function("get_input")
-        func.prepare([np.intp, np.intp, np.intp, np.intp, np.intp])
+        func.prepare('PPPPP')#[np.intp, np.intp, np.intp, np.intp, np.intp])
         return func

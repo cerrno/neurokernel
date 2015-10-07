@@ -85,11 +85,11 @@ class HodgkinHuxley_RK4(BaseNeuron):
                            options=["--ptxas-options=-v"])
         func = mod.get_function("hodgkin_huxley_rk4")
 
-        func.prepare([np.intp, np.intp, np.intp, np.intp,
-                      np.int32, np.intp, scalartype,
-                      np.intp, np.intp, np.intp,
-                      np.intp, np.intp, np.intp,
-                      np.intp])
-
+        func.prepare('PPPPiP'+np.dtype(dtype).char+'PPPPPPP')
+        #             [np.intp, np.intp, np.intp, np.intp,
+        #              np.int32, np.intp, scalartype,
+        #              np.intp, np.intp, np.intp,
+        #              np.intp, np.intp, np.intp,
+        #              np.intp])
 
         return func

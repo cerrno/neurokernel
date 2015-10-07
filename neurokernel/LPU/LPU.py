@@ -532,6 +532,7 @@ class LPU(Module):
         self.sel_out_gpot_ids = self.pm['gpot'].ports_to_inds(self.sel_out_gpot)
         self.sel_in_spk_ids = self.pm['spike'].ports_to_inds(self.sel_in_spk)
         self.sel_out_spk_ids = self.pm['spike'].ports_to_inds(self.sel_out_spk)
+        
 
     def pre_run(self):
         super(LPU, self).pre_run()

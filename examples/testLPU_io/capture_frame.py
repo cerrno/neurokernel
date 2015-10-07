@@ -32,7 +32,7 @@ def get_image():
 def main(data_size):
     #socket connection details
     host = 'localhost' 
-    port = 50000 
+    port = 60000
     size = 4096
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     s.connect((host,port)) 

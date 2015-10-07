@@ -86,10 +86,11 @@ class HodgkinHuxley_Euler(BaseNeuron):
                            options=["--ptxas-options=-v"])
         func = mod.get_function("hodgkin_huxley_euler")
 
-        func.prepare([np.intp, np.intp, np.intp, np.intp,
-                      np.int32, np.intp, scalartype, np.int32,
-                      np.intp, np.intp, np.intp,
-                      np.intp, np.intp, np.intp,
-                      np.intp])
+        func.prepare('PPPPiP'+np.dtype(dtype).char+'iPPPPPPP')
+        #              [np.intp, np.intp, np.intp, np.intp,
+        #              np.int32, np.intp, scalartype, np.int32,
+        #              np.intp, np.intp, np.intp,
+        #              np.intp, np.intp, np.intp,
+        #              np.intp])
 
         return func

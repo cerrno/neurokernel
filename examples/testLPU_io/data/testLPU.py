@@ -10,11 +10,17 @@ import networkx as nx
 #input support
 import h5py
 
+<<<<<<< HEAD
 def create_lpu_0():
+=======
+def create_lpu_0(neu_num):
+
+>>>>>>> d87f8b04a1bff049f2dc4936d684b8c2c0eb3957
     #sets up neurons/networks
     G = nx.DiGraph()
 
     #sets up node connections in graph
+<<<<<<< HEAD
     G.add_nodes_from([0,1])
 
     G.node[0] = {
@@ -34,6 +40,21 @@ def create_lpu_0():
             'public': True, 
             'spiking': False, 
             'selector':'/lpu_1/out/gpot/0', 
+=======
+    G.add_nodes_from(range(neu_num))
+
+
+    for i in xrange(0, neu_num):
+
+        #MorrisLecar updated
+        G.node[i] = {
+            'model': 'MorrisLecar_a',
+            'name': 'neuron_' + str(i),
+            'extern': True, 
+            'public': True, 
+            'spiking': False, 
+            'selector':'/lpu_1/out/gpot/' + str(i), 
+>>>>>>> d87f8b04a1bff049f2dc4936d684b8c2c0eb3957
             'V1': -1.2,
             'V2': 18.0,
             'V3': 2.0,
@@ -47,6 +68,7 @@ def create_lpu_0():
             'phi': 0.04, 
             'offset': 0.0,
             'initV': -50.0,
+<<<<<<< HEAD
             'initn': 0.03       
         }
 
@@ -68,6 +90,19 @@ def create_lpu_0():
 
     nx.write_gexf(G, 'simple_lpu_1.gexf.gz')
 
+=======
+            'initn': 0.03
+        }
+
+    print 'writing'
+    nx.write_gexf(G, 'simple_lpu_1.gexf.gz')
+    print 'done'
+
+
+input_num = 100
+
+create_lpu_0(input_num)
+>>>>>>> d87f8b04a1bff049f2dc4936d684b8c2c0eb3957
 
 #sets up input file
 
@@ -83,14 +118,27 @@ start = 0.3
 stop = 0.6
 
 #the current input
+<<<<<<< HEAD
 I_max = 60
 t = np.arange(0, dt*Nt, dt)
 I = np.zeros((Nt, 1), dtype=np.double)
+=======
+I_max = -60
+t = np.arange(0, dt*Nt, dt)
+I = np.zeros((Nt, input_num), dtype=np.double)
+>>>>>>> d87f8b04a1bff049f2dc4936d684b8c2c0eb3957
 
 #inputs current at points indicated
 I[np.logical_and(t > start, t < stop)] = I_max
 
 with h5py.File('simple_input.h5', 'w') as f: 
+<<<<<<< HEAD
     f.create_dataset('array', (Nt, 1), dtype = np.double, data = I)
 
 create_lpu_0()
+=======
+    f.create_dataset('array', (Nt, input_num), dtype = np.double, data = I)
+
+
+
+>>>>>>> d87f8b04a1bff049f2dc4936d684b8c2c0eb3957

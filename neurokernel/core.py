@@ -369,7 +369,7 @@ class Module(mpi.Worker):
             self._out_port_dict['gpot'][out_id] = \
                     pat.src_idx(int_0, int_1, 'gpot', 'gpot')
             self._out_port_dict_ids['gpot'][out_id] = \
-                    self.pm['gpot'].ports_to_inds(self._out_port_dict['gpot'][out_id])
+                self.pm['gpot'].ports_to_inds(self._out_port_dict['gpot'][out_id])
             self._out_port_dict['spike'][out_id] = \
                     pat.src_idx(int_0, int_1, 'spike', 'spike')
             self._out_port_dict_ids['spike'][out_id] = \

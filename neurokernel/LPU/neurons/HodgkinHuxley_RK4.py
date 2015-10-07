@@ -36,7 +36,6 @@ class HodgkinHuxley_RK4(BaseNeuron):
     '''
     def __init__(self, n_dict, V, dt, debug=False, LPU_id=None):
         self.num_neurons = len(n_dict['id'])
-        print self.num_neurons
         self.dt = np.double(dt)
         self.debug = debug
         self.LPU_id = LPU_id
@@ -44,10 +43,9 @@ class HodgkinHuxley_RK4(BaseNeuron):
 
         self.V = V
 
-        self.n = garray.to_gpu(np.asarray(n_dict['initn'], dtype=np.float64))
-        
         self.m = garray.to_gpu(np.asarray(n_dict['initm'], dtype=np.float64))
         self.h = garray.to_gpu(np.asarray(n_dict['inith'], dtype=np.float64))
+
         self.C_m = garray.to_gpu(np.asarray(n_dict['C_m'], dtype=np.float64))
         self.V_Na = garray.to_gpu(np.asarray(n_dict['V_Na'], dtype=np.float64))
         self.V_K = garray.to_gpu(np.asarray(n_dict['V_K'], dtype=np.float64))
@@ -86,10 +84,10 @@ class HodgkinHuxley_RK4(BaseNeuron):
                            options=["--ptxas-options=-v"])
         func = mod.get_function("hodgkin_huxley_rk4")
 
-        func.prepare([np.intp, np.intp, np.intp, np.intp,
-                      np.int32, np.intp, scalartype,
-                      np.intp, np.intp, np.intp,
-                      np.intp, np.intp, np.intp,
-                      np.intp])
-
+        func.prepare('PPPPiP'+np.dtype(dtype).char+'PPPPPPP')
+        #             [np.intp, np.intp, np.intp, np.intp,
+        #              np.int32, np.intp, scalartype,
+        #              np.intp, np.intp, np.intp,
+        #              np.intp, np.intp, np.intp,
+        #              np.intp])
         return func

@@ -134,7 +134,7 @@ def setup_logger(name='', level=twiggy.levels.DEBUG,
     if screen:
         screen_output = \
           twiggy.outputs.StreamOutput(fmt, stream=sys.stdout)
-        twiggy.add_emitters(('screen', level, None, screen_output))
+        twiggy.addEmitters(('screen', level, None, screen_output))
 
     if zmq_addr:
         if 'neurokernel.tools.zmq' not in sys.modules:

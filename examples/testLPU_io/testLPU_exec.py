@@ -29,6 +29,7 @@ dt = 1e-4
 dur = 1.0
 Nt = int(dur/dt)
 #logger = base.setup_logger(file_name='neurokernel.log', screen=False)
+
 port_data = get_random_port()
 port_ctrl = get_random_port()
 port_time = get_random_port()
@@ -67,7 +68,6 @@ man.add_mod(interface)
 man.add_mod(lpu_1)
 
 man.connect(interface, lpu_1, pat, 0, 1)
-
 man.start(steps=Nt)
 
 man.stop()

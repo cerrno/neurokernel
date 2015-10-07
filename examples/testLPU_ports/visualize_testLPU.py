@@ -33,8 +33,6 @@ V.add_LPU('simple_output_1_gpot.h5',
 V.add_plot({'type': 'waveform', 'ids': {0:[1]}},
             'LPU2', 'Output')
 
-
-
 #vars for plots
 
 #how often it updates

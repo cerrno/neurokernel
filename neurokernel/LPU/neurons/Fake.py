@@ -73,6 +73,7 @@ class Fake(BaseNeuron):
         func = mod.get_function("fake")
 
 
-        func.prepare([np.intp, np.intp, np.int32, np.intp, scalartype, 
-                      np.int32])
+        func.prepare('PPiP'+np.dtype(dtype).char+'i')
+        #             [np.intp, np.intp, np.int32, np.intp, scalartype,
+        #              np.int32])
         return func

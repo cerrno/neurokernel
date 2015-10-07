@@ -22,7 +22,6 @@ V.add_plot({'type': 'waveform', 'ids': {0:[1]}},
             'LPU2', 'Output')
 
 
-
 #vars for plots
 
 #how often it updates
