@@ -67,7 +67,7 @@ if __name__ == "__main__":
         include_package_data = True,
         install_requires = [
             'bidict >= 0.1.0',
-            'bottleneck >= 0.7.0',
+            #'bottleneck >= 0.7.0',
             'futures >= 2.1.5',
             'h5py >= 2.2.1',
             'lxml >= 3.3.0',
