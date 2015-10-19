@@ -3,6 +3,11 @@
 ..  image:: https://raw.githubusercontent.com/neurokernel/neurokernel/master/docs/source/_static/logo.png
     :alt: Neurokernel
 
+Note
+----
+
+Deprecated in favor of active internal repository for development. Please direct inquiries to `lucas.schuermann@columbia.edu <mailto:lucas.schuermann@columbia.edu>`_
+
 Package Description
 -------------------
 
